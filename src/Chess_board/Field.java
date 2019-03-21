@@ -16,6 +16,10 @@ public class Field implements Field_interface{
         setColumn(y);
     }
 
+    public void addNextField(Field_interface.Direction direction, Field field){
+        this.fields_around.put(direction, field);
+    }
+
 
     public void setColumn(int index){
         int ascii_start = 65;

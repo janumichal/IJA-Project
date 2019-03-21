@@ -14,6 +14,8 @@ public interface Field_interface {
     void setColumn(int index);
     void setRow(int index);
 
+    void addNextField(Field_interface.Direction direction, Field field);
+
     enum Direction{
         LEFT_UP,
         UP,
