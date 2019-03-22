@@ -18,27 +18,32 @@ public class Board {
         fillArrayAround();
     }
 
+    // moves piece from position1 to position2
+    public void movePiece(String from, String to){
+
+    }
+
     // show piece placement in text mode
     public void showPiecesText(){
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------------------------------");
         for (int i = 0; i < BOARD_SIZE; i++){
             System.out.print("|");
             for (int j = 0; j < BOARD_SIZE; j++){
                 Piece piece = this.board_array[i][j].getPiece();
                 if(piece instanceof Rook){
-                    System.out.print("  Rook  ");
+                    System.out.print("  Rook (V)  ");
                 }else if(piece instanceof Knight){
-                    System.out.print(" Knight ");
+                    System.out.print(" Knight (J) ");
                 }else if(piece instanceof Bishop){
-                    System.out.print(" Bishop ");
+                    System.out.print(" Bishop (S) ");
                 }else if(piece instanceof King){
-                    System.out.print("  King  ");
+                    System.out.print("  King (K)  ");
                 }else if(piece instanceof Queen){
-                    System.out.print(" Queen  ");
+                    System.out.print(" Queen (D)  ");
                 }else if(piece instanceof Pawn){
-                    System.out.print("  pawn  ");
+                    System.out.print("  pawn (p)  ");
                 }else{
-                    System.out.print("        ");
+                    System.out.print("            ");
                 }
                 if (j == BOARD_SIZE-1){
                     System.out.println("|");
@@ -46,7 +51,7 @@ public class Board {
                     System.out.print("|");
                 }
             }
-            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------");
         }
     }
 
