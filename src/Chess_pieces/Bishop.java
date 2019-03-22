@@ -8,13 +8,18 @@ public class Bishop extends Piece {
     }
 
     public boolean isMoveValid(int x, int y, String type){
-        boolean is_valid = false;
-        int pos_x = x;
-        int pos_y = 0;
         int array_size = 8;
-        for (int i = 0; i < array_size; i++){
-
+        for (int i = 1; i <= array_size; i++){
+            if ((x == this.x-i)&&(y == this.y-i)){
+                return true;
+            }else if((x == this.x-i)&&(y == this.y+i)){
+                return true;
+            }else if ((x == this.x+i)&&(y == this.y+i)){
+                return true;
+            }else if ((x == this.x+i)&&(y == this.y-i)){
+                return true;
+            }
         }
-        return is_valid;
+        return false;
     }
 }
