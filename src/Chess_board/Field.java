@@ -12,6 +12,7 @@ public class Field implements Field_interface{
     private EnumMap<Field_interface.Direction, Field> fields_around;
 
     public Field(int x, int y){
+        fields_around = new EnumMap<>(Field_interface.Direction.class);
         setRow(x);
         setColumn(y);
     }
