@@ -5,5 +5,6 @@ public class Main {
         Board chess_b = new Board();
         chess_b.fillBoard();
         chess_b.showPiecesText();
+        chess_b.movePiece("a2a4");
     }
 }

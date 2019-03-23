@@ -5,8 +5,8 @@ import Chess_pieces.Piece;
 import java.util.EnumMap;
 
 public class Field implements Field_interface{
-    int row;
-    char column;
+    private int row;
+    private char column;
 
     private Piece piece_on_board = null;
     private EnumMap<Field_interface.Direction, Field> fields_around;
