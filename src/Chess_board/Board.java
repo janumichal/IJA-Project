@@ -7,12 +7,13 @@ import java.util.Arrays;
 
 public class Board {
     private static final int BOARD_SIZE = 8;
-    private Field[][] board_array = new Field[BOARD_SIZE][BOARD_SIZE];
+    private Field[][] board_array;
 
     // constructor creates array and fills it with pieces
     public Board(){
-        for (int y = 0; y < BOARD_SIZE; y++){
-            for (int x = 0; x < BOARD_SIZE; x++){
+        board_array = new Field[BOARD_SIZE][BOARD_SIZE];
+        for (int x = 0; x < BOARD_SIZE; x++){
+            for (int y = 0; y < BOARD_SIZE; y++){
                 Field field = new Field(x, y);
                 board_array[x][y] = field;
             }
@@ -20,6 +21,13 @@ public class Board {
         fillArrayAround();
     }
 
+    //################################################# FIELD WORK #####################################################
+
+    public Field getField(int x, int y){
+        return this.board_array[x][y];
+    }
+
+    // ################################################# CORDINATES MOVE ###############################################
     // moves piece from position1 to position2
     public void movePiece(String from_to){
         int[] cordiantes_array = new int[4];
@@ -34,9 +42,76 @@ public class Board {
             System.exit(0);
         }
 
+        // TODO MOVE by cords
 
+        Field from = getField(cordiantes_array[0], cordiantes_array[1]);
+        Field to = getField(cordiantes_array[2], cordiantes_array[3]);
 
-        System.out.println(Arrays.toString(cordiantes_array));
+        Piece player = from.getPiece();
+        Piece target = to.getPiece();
+
+        if (player instanceof Pawn){ // MOVE PAWN
+            if(((Pawn) player).isMoveValid(cordiantes_array[2], cordiantes_array[3], target)){
+                System.out.println("IS VALID MOVE");
+                movePawn(from, to);
+            }else {
+                System.out.println("IS NOT VALID MOVE");
+            }
+        }else if(player instanceof Rook){
+
+        }else if (player instanceof Knight){
+
+        }else if(player instanceof Bishop){
+
+        }else if(player instanceof King){
+
+        }else if(player instanceof Queen){
+
+        }else{
+            System.out.println("NO movable piece avalible");
+        }
+    }
+
+    // ############################################ PIECE MOVES ########################################################
+    public void movePawn(Field from, Field to){
+        if (to.getPiece() == null){
+            Field pointer = from.nextField(Field_interface.Direction.UP);
+            boolean free_path = true;
+
+            while (to != pointer){
+                if(pointer.getPiece() != null){
+                    free_path = false;
+                    break;
+                }else{
+                    pointer = pointer.nextField(Field_interface.Direction.UP);
+                }
+            }
+
+            if (free_path){
+                move(from, to);
+            }else {
+                System.out.println("NOT FREE PATH");
+            }
+        }else {
+            move(from, to);
+        }
+    }
+
+    public void move(Field from, Field to){
+        if (!to.isEmpty()){
+            if(from.getPiece().getColor() == to.getPiece().getColor()){
+                System.out.println("CANT ATTACK SAME COLOR");
+            }else{
+                Piece piece_to;
+                Piece piece_from = from.removePiece();
+                piece_to = to.removePiece();
+                System.out.println("TARGET ["+piece_to.getValue()+"]");
+                to.putPiece(piece_from);
+            }
+        }else{
+            Piece piece_from = from.removePiece();
+            to.putPiece(piece_from);
+        }
     }
 
     //check if coordinates are on board
@@ -86,9 +161,9 @@ public class Board {
     private int[] normalPosition(String from, String to){
         int[] array = new int[4];
         array[0] = convertCharToIndex(from.charAt(0));
-        array[1] = BOARD_SIZE - (from.charAt(1) - 49);
+        array[1] = BOARD_SIZE - (from.charAt(1) - 49) -1;
         array[2] = convertCharToIndex(to.charAt(0));
-        array[3] = BOARD_SIZE - (to.charAt(1) - 49);
+        array[3] = BOARD_SIZE - (to.charAt(1) - 49) -1;
         return array;
     }
 
@@ -96,13 +171,15 @@ public class Board {
         return (((int) Character.toUpperCase(character)))-65;
     }
 
+
+    //############################################# CREATING BOARD #####################################################
     // show piece placement in text mode
     public void showPiecesText(){
         System.out.println("---------------------------------------------------------------------------------------------------------");
-        for (int i = 0; i < BOARD_SIZE; i++){
+        for (int y = 0; y < BOARD_SIZE; y++){
             System.out.print("|");
-            for (int j = 0; j < BOARD_SIZE; j++){
-                Piece piece = this.board_array[i][j].getPiece();
+            for (int x = 0; x < BOARD_SIZE; x++){
+                Piece piece = this.board_array[x][y].getPiece();
                 if(piece instanceof Rook){
                     System.out.print("  Rook (V)  ");
                 }else if(piece instanceof Knight){
@@ -118,7 +195,7 @@ public class Board {
                 }else{
                     System.out.print("            ");
                 }
-                if (j == BOARD_SIZE-1){
+                if (x == BOARD_SIZE-1){
                     System.out.println("|");
                 }else {
                     System.out.print("|");
@@ -137,33 +214,33 @@ public class Board {
     // placement of pieces
     private void placePieces(color_piece color){
         boolean is_black = color == color_piece.BLACK;
-        int x = is_black ? 0 : BOARD_SIZE-1;
-        for (int y = 0; y < BOARD_SIZE; y++){
+        int y = is_black ? 0 : BOARD_SIZE-1;
+        for (int x = 0; x < BOARD_SIZE; x++){
             // place PAWN
-            this.board_array[is_black ? x+1 : x-1][y].setPiece(new Pawn(x, y, color));
-            switch (y){
+            this.board_array[x][is_black ? y+1 : y-1].putPiece(new Pawn(x, is_black ? y+1 : y-1, color));
+            switch (x){
                 case 0:
                 case (BOARD_SIZE-1):
                     // place ROOKS
-                    this.board_array[x][y].setPiece(new Rook(x, y, color));
+                    this.board_array[x][y].putPiece(new Rook(x, y, color));
                     break;
                 case 1:
                 case (BOARD_SIZE-2):
                     // place KNIGHTS
-                    this.board_array[x][y].setPiece(new Knight(x, y, color));
+                    this.board_array[x][y].putPiece(new Knight(x, y, color));
                     break;
                 case 2:
                 case (BOARD_SIZE-3):
                     //place BISHOPS
-                    this.board_array[x][y].setPiece(new Bishop(x, y, color));
+                    this.board_array[x][y].putPiece(new Bishop(x, y, color));
                     break;
                 case 3:
                     // place KING
-                    this.board_array[x][y].setPiece(new King(x, y, color));
+                    this.board_array[x][y].putPiece(new King(x, y, color));
                     break;
                 case (BOARD_SIZE-4):
                     // place QUEEN
-                    this.board_array[x][y].setPiece(new Queen(x, y, color));
+                    this.board_array[x][y].putPiece(new Queen(x, y, color));
                     break;
             }
         }
@@ -171,8 +248,8 @@ public class Board {
 
     // fills array around in seperate field across whole board
     private void fillArrayAround(){
-        for (int y = 0; y < BOARD_SIZE; y++){
-            for (int x = 0; x < BOARD_SIZE; x++){
+        for (int x = 0; x < BOARD_SIZE; x++){
+            for (int y = 0; y < BOARD_SIZE; y++){
                 Field actual_field = this.board_array[x][y];
 
                 for (int k = 0;k < 8;k++){

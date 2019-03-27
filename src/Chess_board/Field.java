@@ -6,15 +6,19 @@ import java.util.EnumMap;
 
 public class Field implements Field_interface{
     private int row;
-    private char column;
+    private int col;
 
     private Piece piece_on_board = null;
     private EnumMap<Field_interface.Direction, Field> fields_around;
 
     public Field(int x, int y){
         fields_around = new EnumMap<>(Field_interface.Direction.class);
-        setRow(x);
-        setColumn(y);
+        setCol(x);
+        setRow(y);
+    }
+
+    public Field nextField(Field_interface.Direction direction){
+        return this.fields_around.get(direction);
     }
 
     public void addNextField(Field_interface.Direction direction, Field field){
@@ -22,15 +26,21 @@ public class Field implements Field_interface{
     }
 
 
-    public void setColumn(int index){
-        int ascii_start = 65;
-        this.column = (char)(ascii_start + index);
+    public void setCol(int col){
+        this.col = col;
     }
 
-    public void setRow(int index){
-        this.row = index + 1;
+    public void setRow(int row){
+        this.row = row;
     }
 
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
 
     // get piece placed in this field
     public Piece getPiece() {
@@ -48,26 +58,21 @@ public class Field implements Field_interface{
     }
 
     // put piece on field if empty and return true if piece was successfuly placed
-    public boolean putPiece(Piece piece){
-        if(isEmpty()){
-            setPiece(piece);
-            return true;
-        }else {
-            return false;
-        }
+    public void putPiece(Piece piece){
+        removePiece();
+        piece.setCol(this.getCol());
+        piece.setRow(this.getRow());
+        setPiece(piece);
     }
 
-    public boolean removePiece(Piece piece) {
-        if(isEmpty()){
-            return true;
-        }else{
-            if (this.piece_on_board == piece){
-                this.piece_on_board = null;
-                return true;
-            }
-            return false;
-        }
+    public Piece removePiece() {
+        Piece piece = this.piece_on_board;
+        this.piece_on_board = null;
+        return piece;
     }
 
+    public void getCords(){
+        System.out.println("["+getCol()+","+getRow()+"]");
+    }
 
 }

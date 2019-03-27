@@ -7,7 +7,7 @@ public class King extends Piece {
         super(x, y, 0, color);
     }
 
-    public boolean isMoveValid(int x, int y, String type){
-        return (x != this.x && y != this.y) && ((( (this.x-1) <= x ) || ( x <= (this.x+1) )) && (( (this.y-1) <= y ) || ( y <= (this.y+1) )) );
-    }
+//    public boolean isMoveValid(int x, int y, String type){
+//        return (x != this.x && y != this.y) && ((( (this.x-1) <= x ) || ( x <= (this.x+1) )) && (( (this.y-1) <= y ) || ( y <= (this.y+1) )) );
+//    }
 }

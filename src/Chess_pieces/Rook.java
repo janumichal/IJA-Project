@@ -7,7 +7,7 @@ public class Rook extends Piece {
         super(x, y, 5, color);
     }
 
-    public boolean isMoveValid(int x, int y, String type){
-        return ((x == this.x && y != this.y) || (x != this.x && y == this.y));
-    }
+//    public boolean isMoveValid(int x, int y, String type){
+//        return ((x == this.x && y != this.y) || (x != this.x && y == this.y));
+//    }
 }

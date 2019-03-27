@@ -8,13 +8,16 @@ public interface Field_interface {
 
     boolean isEmpty();
 
-    boolean putPiece(Piece piece);
-    boolean removePiece(Piece piece);
+    void putPiece(Piece piece);
+    Piece removePiece();
 
-    void setColumn(int index);
-    void setRow(int index);
+    void setCol(int col);
+    void setRow(int row);
+
+    void getCords();
 
     void addNextField(Field_interface.Direction direction, Field field);
+    Field nextField(Field_interface.Direction direction);
 
     enum Direction{
         LEFT_UP,

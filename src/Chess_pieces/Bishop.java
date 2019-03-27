@@ -7,19 +7,19 @@ public class Bishop extends Piece {
         super(x, y, 3, color);
     }
 
-    public boolean isMoveValid(int x, int y, String type){
-        int array_size = 8;
-        for (int i = 1; i <= array_size; i++){
-            if ((x == this.x-i)&&(y == this.y-i)){
-                return true;
-            }else if((x == this.x-i)&&(y == this.y+i)){
-                return true;
-            }else if ((x == this.x+i)&&(y == this.y+i)){
-                return true;
-            }else if ((x == this.x+i)&&(y == this.y-i)){
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean isMoveValid(int x, int y, String type){
+//        int array_size = 8;
+//        for (int i = 1; i <= array_size; i++){
+//            if ((x == this.x-i)&&(y == this.y-i)){
+//                return true;
+//            }else if((x == this.x-i)&&(y == this.y+i)){
+//                return true;
+//            }else if ((x == this.x+i)&&(y == this.y+i)){
+//                return true;
+//            }else if ((x == this.x+i)&&(y == this.y-i)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }
