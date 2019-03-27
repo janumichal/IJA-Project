@@ -7,9 +7,8 @@ public class Main {
         Board chess_b = new Board();
         chess_b.fillBoard();
         chess_b.showPiecesText();
-        chess_b.movePiece("a2a4");
-        chess_b.showPiecesText();
-        chess_b.movePiece("a4b5");
+        System.out.println();
+        chess_b.movePiece("b1c3");
         chess_b.showPiecesText();
     }
 }

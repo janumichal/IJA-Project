@@ -42,8 +42,6 @@ public class Board {
             System.exit(0);
         }
 
-        // TODO MOVE by cords
-
         Field from = getField(cordiantes_array[0], cordiantes_array[1]);
         Field to = getField(cordiantes_array[2], cordiantes_array[3]);
 
@@ -52,49 +50,83 @@ public class Board {
 
         if (player instanceof Pawn){ // MOVE PAWN
             if(((Pawn) player).isMoveValid(cordiantes_array[2], cordiantes_array[3], target)){
-                System.out.println("IS VALID MOVE");
                 movePawn(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
             }
         }else if(player instanceof Rook){
-
-        }else if (player instanceof Knight){
-
+            //TODO ROOK MOVE
+        }else if (player instanceof Knight){ // MOVE KNIGHT
+            if (((Knight) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+                moveKnight(from, to);
+            }else {
+                System.out.println("IS NOT VALID MOVE");
+            }
         }else if(player instanceof Bishop){
-
+            // TODO BISHOP MOVE
         }else if(player instanceof King){
-
+            // TODO KING MOVE
         }else if(player instanceof Queen){
-
+            // TODO QUEEN MOVE
         }else{
             System.out.println("NO movable piece avalible");
         }
     }
 
     // ############################################ PIECE MOVES ########################################################
+
+    // PAWN
     public void movePawn(Field from, Field to){
-        if (to.getPiece() == null){
-            Field pointer = from.nextField(Field_interface.Direction.UP);
-            boolean free_path = true;
+        if (from.getPiece().getColor() == color_piece.WHITE){
+            if (to.getPiece() == null){
+                Field pointer = from.nextField(Field_interface.Direction.UP);
+                boolean free_path = true;
 
-            while (to != pointer){
-                if(pointer.getPiece() != null){
-                    free_path = false;
-                    break;
-                }else{
-                    pointer = pointer.nextField(Field_interface.Direction.UP);
+                while (to != pointer){
+                    if(pointer.getPiece() != null){
+                        free_path = false;
+                        break;
+                    }else{
+                        pointer = pointer.nextField(Field_interface.Direction.UP);
+                    }
                 }
-            }
 
-            if (free_path){
-                move(from, to);
+                if (free_path){
+                    move(from, to);
+                }else {
+                    System.out.println("NOT FREE PATH");
+                }
             }else {
-                System.out.println("NOT FREE PATH");
+                move(from, to);
             }
-        }else {
-            move(from, to);
+        }else{
+            if (to.getPiece() == null){
+                Field pointer = from.nextField(Field_interface.Direction.DOWN);
+                boolean free_path = true;
+
+                while (to != pointer){
+                    if(pointer.getPiece() != null){
+                        free_path = false;
+                        break;
+                    }else{
+                        pointer = pointer.nextField(Field_interface.Direction.DOWN);
+                    }
+                }
+
+                if (free_path){
+                    move(from, to);
+                }else {
+                    System.out.println("NOT FREE PATH");
+                }
+            }else {
+                move(from, to);
+            }
         }
+    }
+
+    // Knight
+    public void moveKnight(Field from, Field to){
+        move(from, to);
     }
 
     public void move(Field from, Field to){
