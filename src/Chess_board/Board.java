@@ -3,6 +3,7 @@ package Chess_board;
 import Chess_pieces.*;
 import enums.color_piece;
 
+import java.security.DigestException;
 import java.util.Arrays;
 
 public class Board {
@@ -54,16 +55,24 @@ public class Board {
             }else {
                 System.out.println("IS NOT VALID MOVE");
             }
-        }else if(player instanceof Rook){
-            //TODO ROOK MOVE
+        }else if(player instanceof Rook){ // MOVE ROOK
+            if (((Rook) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+                moveRook(from, to);
+            }else {
+                System.out.println("IS NOT VALID MOVE");
+            }
         }else if (player instanceof Knight){ // MOVE KNIGHT
             if (((Knight) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
                 moveKnight(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
             }
-        }else if(player instanceof Bishop){
-            // TODO BISHOP MOVE
+        }else if(player instanceof Bishop){ // MOVE BISHOP
+            if (((Bishop) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+                moveBishop(from, to);
+            }else {
+                System.out.println("IS NOT VALID MOVE");
+            }
         }else if(player instanceof King){
             // TODO KING MOVE
         }else if(player instanceof Queen){
@@ -74,28 +83,59 @@ public class Board {
     }
 
     // ############################################ PIECE MOVES ########################################################
+    // BISHOP
+    private void moveBishop(Field from, Field to){
+        if (from.getCol() < to.getCol() && from.getRow() < to.getRow()){ // GO RIGHT DOWN
+            moveInDir(Field_interface.Direction.RIGHT_DOWN, from, to);
+        }else if (from.getCol() < to.getCol() && from.getRow() > to.getRow()){ // GO RIGHT UP
+            moveInDir(Field_interface.Direction.RIGHT_UP, from, to);
+        }else if (from.getCol() > to.getCol() && from.getRow() < to.getRow()){ // GO LEFT DOWN
+            moveInDir(Field_interface.Direction.LEFT_DOWN, from, to);
+        }else if (from.getCol() > to.getCol() && from.getRow() > to.getRow()){ // GO LEFT UP
+            moveInDir(Field_interface.Direction.LEFT_UP, from, to);
+        }
+    }
+
+
+    // ROOK
+    private void moveRook(Field from, Field to){
+        if (from.getCol() < to.getCol()){ // GO RIGHT
+            moveInDir(Field_interface.Direction.RIGHT, from, to);
+        }else if (from.getCol() > to.getCol()){ // GO LEFT
+            moveInDir(Field_interface.Direction.LEFT, from, to);
+        }else if (from.getRow() < to.getRow()){ // GO DOWN
+            moveInDir(Field_interface.Direction.DOWN, from, to);
+        }else if (from.getRow() > to.getRow()){ // GO UP
+            moveInDir(Field_interface.Direction.UP, from, to);
+        }
+    }
+
+    private void moveInDir(Field_interface.Direction direction, Field from, Field to){
+            Field pointer = from.nextField(direction);
+            boolean free_path = true;
+
+            while (to != pointer){
+                if(pointer.getPiece() != null){
+                    free_path = false;
+                    break;
+                }else{
+                    pointer = pointer.nextField(direction);
+                }
+            }
+
+            if (free_path){
+                move(from, to);
+            }else {
+                System.out.println("NOT FREE PATH");
+            }
+
+    }
 
     // PAWN
-    public void movePawn(Field from, Field to){
+    private void movePawn(Field from, Field to){
         if (from.getPiece().getColor() == color_piece.WHITE){
             if (to.getPiece() == null){
-                Field pointer = from.nextField(Field_interface.Direction.UP);
-                boolean free_path = true;
-
-                while (to != pointer){
-                    if(pointer.getPiece() != null){
-                        free_path = false;
-                        break;
-                    }else{
-                        pointer = pointer.nextField(Field_interface.Direction.UP);
-                    }
-                }
-
-                if (free_path){
-                    move(from, to);
-                }else {
-                    System.out.println("NOT FREE PATH");
-                }
+                moveInDir(Field_interface.Direction.UP, from, to);
             }else {
                 move(from, to);
             }
@@ -125,11 +165,11 @@ public class Board {
     }
 
     // Knight
-    public void moveKnight(Field from, Field to){
+    private void moveKnight(Field from, Field to){
         move(from, to);
     }
 
-    public void move(Field from, Field to){
+    private void move(Field from, Field to){
         if (!to.isEmpty()){
             if(from.getPiece().getColor() == to.getPiece().getColor()){
                 System.out.println("CANT ATTACK SAME COLOR");
