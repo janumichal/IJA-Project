@@ -1,4 +1,4 @@
-package Chess_board;
+package Chess_common;
 
 import Chess_pieces.Piece;
 

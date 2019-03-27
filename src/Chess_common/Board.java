@@ -1,10 +1,7 @@
-package Chess_board;
+package Chess_common;
 
 import Chess_pieces.*;
 import enums.color_piece;
-
-import java.security.DigestException;
-import java.util.Arrays;
 
 public class Board {
     private static final int BOARD_SIZE = 8;
@@ -74,9 +71,17 @@ public class Board {
                 System.out.println("IS NOT VALID MOVE");
             }
         }else if(player instanceof King){
-            // TODO KING MOVE
+            if (((King) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+                moveKing(from, to);
+            }else {
+                System.out.println("IS NOT VALID MOVE");
+            }
         }else if(player instanceof Queen){
-            // TODO QUEEN MOVE
+            if (((Queen) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+                moveQueen(from, to);
+            }else {
+                System.out.println("IS NOT VALID MOVE");
+            }
         }else{
             System.out.println("NO movable piece avalible");
         }
@@ -96,6 +101,31 @@ public class Board {
         }
     }
 
+    //Queen
+    private void moveQueen(Field from, Field to){
+        if (from.getCol() < to.getCol() && from.getRow() < to.getRow()){ // GO RIGHT DOWN
+            moveInDir(Field_interface.Direction.RIGHT_DOWN, from, to);
+        }else if (from.getCol() < to.getCol() && from.getRow() > to.getRow()){ // GO RIGHT UP
+            moveInDir(Field_interface.Direction.RIGHT_UP, from, to);
+        }else if (from.getCol() > to.getCol() && from.getRow() < to.getRow()){ // GO LEFT DOWN
+            moveInDir(Field_interface.Direction.LEFT_DOWN, from, to);
+        }else if (from.getCol() > to.getCol() && from.getRow() > to.getRow()){ // GO LEFT UP
+            moveInDir(Field_interface.Direction.LEFT_UP, from, to);
+        }else if (from.getCol() < to.getCol() && from.getRow() == to.getRow()){ // GO RIGHT
+            moveInDir(Field_interface.Direction.RIGHT, from, to);
+        }else if (from.getCol() > to.getCol() && from.getRow() == to.getRow()){ // GO LEFT
+            moveInDir(Field_interface.Direction.LEFT, from, to);
+        }else if (from.getRow() < to.getRow() && from.getCol() == to.getCol()){ // GO DOWN
+            moveInDir(Field_interface.Direction.DOWN, from, to);
+        }else if (from.getRow() > to.getRow() && from.getCol() == to.getCol()){ // GO UP
+            moveInDir(Field_interface.Direction.UP, from, to);
+        }
+    }
+
+    //King
+    private void moveKing(Field from, Field to){
+        move(from, to);
+    }
 
     // ROOK
     private void moveRook(Field from, Field to){
