@@ -1,6 +1,7 @@
 package Chess_common;
 
 import Chess_pieces.Piece;
+import enums.color_piece;
 
 import java.io.PipedReader;
 
@@ -14,14 +15,14 @@ public class Game {
         this.history = new History();
         HistoryItem item;
         board.fillBoard();
+
         move("a2a4");
+        move("b7b6");
         move("a4a5");
-        move("a5a6");
-        move("a6b7");
-        undo();
-        undo();
-        move("a5a6");
-        redo();
+        move("b6a5");
+        System.out.println(points(color_piece.BLACK));
+//        move("a5a6");
+//        move("a6b7");
 
         board.showPiecesText();
     }
@@ -30,6 +31,14 @@ public class Game {
         item = this.board.movePiece(position);
         if (item != null){
             this.history.add(item);
+        }
+    }
+
+    public int points(color_piece color){
+        if (color == color_piece.BLACK){
+            return this.board.getBlack_points();
+        }else{
+            return this.board.getWhite_points();
         }
     }
 
