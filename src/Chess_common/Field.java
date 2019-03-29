@@ -60,8 +60,10 @@ public class Field implements Field_interface{
     // put piece on field if empty and return true if piece was successfuly placed
     public void putPiece(Piece piece){
         removePiece();
-        piece.setCol(this.getCol());
-        piece.setRow(this.getRow());
+        if (piece != null){
+            piece.setCol(this.getCol());
+            piece.setRow(this.getRow());
+        }
         setPiece(piece);
     }
 

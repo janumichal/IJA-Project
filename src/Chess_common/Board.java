@@ -6,6 +6,7 @@ import enums.color_piece;
 public class Board {
     private static final int BOARD_SIZE = 8;
     private Field[][] board_array;
+    private HistoryItem historyItem;
 
     // constructor creates array and fills it with pieces
     public Board(){
@@ -27,7 +28,8 @@ public class Board {
 
     // ################################################# CORDINATES MOVE ###############################################
     // moves piece from position1 to position2
-    public void movePiece(String from_to){
+    public HistoryItem movePiece(String from_to){
+        HistoryItem historyItem;
         int[] cordiantes_array = new int[4];
         cordiantes_array = seperateFromTo(from_to);
 
@@ -85,6 +87,7 @@ public class Board {
         }else{
             System.out.println("NO movable piece avalible");
         }
+        return this.historyItem;
     }
 
     // ############################################ PIECE MOVES ########################################################
@@ -209,11 +212,19 @@ public class Board {
                 piece_to = to.removePiece();
                 System.out.println("TARGET ["+piece_to.getValue()+"]");
                 to.putPiece(piece_from);
+                this.historyItem = new HistoryItem(from, to, piece_to);
             }
         }else{
             Piece piece_from = from.removePiece();
             to.putPiece(piece_from);
+            this.historyItem = new HistoryItem(from, to, null);
         }
+    }
+
+    public void moveHistory(Field from, Field to, Piece target){
+        Piece piece = to.removePiece();
+        from.putPiece(piece);
+        to.putPiece(target);
     }
 
     //check if coordinates are on board
