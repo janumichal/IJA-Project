@@ -7,8 +7,17 @@ public class Tab {
     boolean replay_mode;
     String loaded_game;
 
-    public Tab(String loaded_game) {
+    public Tab() {
         this.game = new Game();
-        this.replay_mode = loaded_game != null && !loaded_game.equals("");
+//        move("a2a4");
+//        move("b7b6");
+//        move("a4a5");
+//        move("b6a5");
+//        move("a5a6");
+//        move("a6b7");
+        String all_moves = "1. xa3 b7b6\n";
+        this.game.loadAllMoves(all_moves);
+
+
     }
 }

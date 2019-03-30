@@ -41,11 +41,13 @@ public class Board {
 
         if (cordiantes_array == null){
             System.out.println("coordinates err");
-            System.exit(0);
+            // TODO WINDOW POPUP
+            return null;
         }
         if (checkCoordinates(cordiantes_array)){
             System.out.println("coordinates not valid number,letter");
-            System.exit(0);
+            // TODO WINDOW POPUP
+            return null;
         }
 
         Field from = getField(cordiantes_array[0], cordiantes_array[1]);
@@ -57,11 +59,13 @@ public class Board {
             if (is_white_on_move){
                 if (player.getColor() == color_piece.BLACK){
                     System.out.println("WHITE IS ON MOVE");
+                    // TODO WINDOW POPUP
                     return null;
                 }
             }else {
                 if (player.getColor()== color_piece.WHITE){
                     System.out.println("BLACK IS ON MOVE");
+                    // TODO WINDOW POPUP
                     return null;
                 }
             }
@@ -73,39 +77,53 @@ public class Board {
                 movePawn(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
+                // TODO WINDOW POPUP
+                return null;
             }
         }else if(player instanceof Rook){ // MOVE ROOK
             if (((Rook) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
                 moveRook(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
+                // TODO WINDOW POPUP
+                return null;
             }
         }else if (player instanceof Knight){ // MOVE KNIGHT
             if (((Knight) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
                 moveKnight(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
+                // TODO WINDOW POPUP
+                return null;
             }
         }else if(player instanceof Bishop){ // MOVE BISHOP
             if (((Bishop) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
                 moveBishop(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
+                // TODO WINDOW POPUP
+                return null;
             }
         }else if(player instanceof King){
             if (((King) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
                 moveKing(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
+                // TODO WINDOW POPUP
+                return null;
             }
         }else if(player instanceof Queen){
             if (((Queen) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
                 moveQueen(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
+                // TODO WINDOW POPUP
+                return null;
             }
         }else{
             System.out.println("NO movable piece avalible");
+            // TODO WINDOW POPUP
+            return null;
         }
         return this.historyItem;
     }
@@ -226,6 +244,7 @@ public class Board {
         if (!to.isEmpty()){
             if(from.getPiece().getColor() == to.getPiece().getColor()){
                 System.out.println("CANT ATTACK SAME COLOR");
+                // TODO WINDOW POPUP
             }else{
                 Piece piece_to;
                 Piece piece_from = from.removePiece();
@@ -265,7 +284,7 @@ public class Board {
     }
 
     //seperates coordinates FROM and coordinate TO
-    private int[] seperateFromTo(String from_to){
+    private int[] seperateFromTo(String from_to){ // TODO COORDS
         String from, to;
         if(from_to.length() == 4 || from_to.length() == 5){ // normal positions
             if (from_to.length() == 5){
