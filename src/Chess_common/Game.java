@@ -3,19 +3,15 @@ package Chess_common;
 import Chess_pieces.Piece;
 import enums.color_piece;
 
-import java.io.PipedReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Game {
     Board board;
     History history;
     HistoryItem item;
-    List<String> loaded_moves;
-    boolean is_check;
-    boolean is_mat;
+    List<Move> loaded_moves;
+    boolean is_pawn;
 
     public Game() {
         this.loaded_moves = new ArrayList<>();
@@ -23,12 +19,15 @@ public class Game {
         this.history = new History();
         HistoryItem item;
         board.fillBoard();
-        this.is_check = false;
-        this.is_mat = false;
+        this.is_pawn = false;
 
-
+        next();
 
         board.showPiecesText();
+    }
+
+    public void next(){
+
     }
 
     public void move(String position){
@@ -83,13 +82,14 @@ public class Game {
                     System.out.println("INVALID NUMBER OF MOVES");
                     break;
                 }else {
-                    String white_move = arr_cord[0];
-                    String black_move = arr_cord[1];
+                    String white = arr_cord[0];
+                    String black = arr_cord[1];
 
-                    if (validFormat(white_move) && validFormat(black_move)) {
-//                        this.loaded_moves.add(white_move); //TODO OBJ FORMATED MOVE TO LIST
-//                        this.loaded_moves.add(black_move);
-                    }else {
+
+                    if (validFormat(white) && validFormat(black)) {
+                        this.loaded_moves.add(formatMove(white));
+                        this.loaded_moves.add(formatMove(black));
+                    }else{
                         System.out.println("FORMAT NOT VALID");
                         break;
                     }
@@ -99,10 +99,121 @@ public class Game {
 
     }
 
+    public Move formatMove(String coordinates){
+        Move move = new Move();
+            int counter = 0;
+            char sign = coordinates.charAt(counter++);
+            switch (sign){
+                case 'K':
+                    move.setKing();
+                    sign = coordinates.charAt(counter++);
+                    return isBodyMove(coordinates, sign, counter, move);
+                case 'D':
+                    move.setQueen();
+                    sign = coordinates.charAt(counter++);
+                    return isBodyMove(coordinates, sign, counter, move);
+                case 'V':
+                    move.setRook();
+                    sign = coordinates.charAt(counter++);
+                    return isBodyMove(coordinates, sign, counter, move);
+                case 'S':
+                    move.setBishop();
+                    sign = coordinates.charAt(counter++);
+                    return isBodyMove(coordinates, sign, counter, move);
+                case 'J':
+                    move.setKnight();
+                    sign = coordinates.charAt(counter++);
+                    return isBodyMove(coordinates, sign, counter, move);
+                default:
+                    move.setPawn();
+                    return isBodyMove(coordinates, sign, counter, move);
+            }
+    }
+
+    public Move isBodyMove(String coordinates, char sign, int counter, Move move){
+        if (isValidSign(sign)){ // is a,b,c,d,e,f,g,h (FIRST CHAR)
+            move.setColumn(sign);
+            sign = coordinates.charAt(counter++);
+            if (isValidNumber(sign)){ // is 1,2,3,4,5,6,7,8
+                move.setRow(sign);
+                if (coordinates.length() <= counter){
+                    move.setTo(this.board.getField(move.getColumn(), move.getRow()));
+                    return move;
+                }
+                move.setFrom(this.board.getField(move.getColumn(), move.getRow()));
+                sign = coordinates.charAt(counter++);
+                if (sign == 'x'){
+                    move.setTake();
+                    sign = coordinates.charAt(counter++);
+                    return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+                }else if (isValidSign(sign)){
+                    return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+                }
+            }else if (sign == 'x'){
+                move.setTake();
+                sign = coordinates.charAt(counter++);
+                return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+            }else if (isValidSign(sign)){
+                return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+            }
+        }else if (isValidNumber(sign)){ // is 1,2,3,4,5,6,7,8 (FIRST CHAR) simplified version DONE
+            move.setRow(sign);
+            sign = coordinates.charAt(counter++);
+            if(isValidSign(sign)){ // is a,b,c,d,e,f,g,h (SECOND CHAR)
+                return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+            }else if (sign == 'x'){ // is x (SECOND CHAR)
+                move.setTake();
+                sign = coordinates.charAt(counter++);
+                return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+            }
+        }else if (sign == 'x'){
+            move.setTake();
+            sign = coordinates.charAt(counter++);
+            return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+        }
+        return move;
+    }
+
+    public Move isValidFromTakeToEndMove(String coordinates, char sign, int counter, Move move){
+        move.setColumn(sign);
+        sign = coordinates.charAt(counter++);
+        move.setRow(sign);
+        move.setTo(this.board.getField(move.getColumn(),move.getRow()));
+        if (coordinates.length() > counter){
+            sign = coordinates.charAt(counter++);
+            switch (sign){
+                case 'D':
+                case 'V':
+                case 'S':
+                case 'J':
+                    move.setExchange(sign);
+                    if (coordinates.length() > counter){
+                        sign = coordinates.charAt(counter++);
+                        if (sign == '#' || sign == '+'){
+                            move.setMat();
+                        }else if (sign == '+'){
+                            move.setCheck();
+                        }
+                        return move;
+                    }else {
+                        return move;
+                    }
+                case '#':
+                    move.setMat();
+                    return move;
+                case '+':
+                    move.setCheck();
+                    return move;
+            }
+        }else {
+            return move;
+        }
+        return move;
+    }
+
     // VALIDATION OF MOVE FORMAT
 
     public boolean validFormat(String coordinates){
-        System.out.println(coordinates); // TODO DEL LATER
         if (coordinates.length() < 2){
             System.out.println("INVALID LENGTH OF COORDINATES");
         }else {
@@ -117,6 +228,7 @@ public class Game {
                     sign = coordinates.charAt(counter++);
                     return isBody(coordinates, sign, counter);
                 default:
+                    this.is_pawn = true;
                     return isBody(coordinates, sign, counter);
             }
         }
@@ -159,6 +271,10 @@ public class Game {
                         case 'V':
                         case 'S':
                         case 'J':
+                            if (is_pawn == false){
+                                System.out.println("ONLY PAWN CAN EXCHANGE");
+                                return false;
+                            }
                             if (coordinates.length() > counter){
                                 sign = coordinates.charAt(counter++);
                                 if (sign == '#' || sign == '+'){
@@ -258,5 +374,9 @@ public class Game {
         }else {
             return false;
         }
+    }
+
+    public int convertCharToIndex(char col){
+        return ((int)col - 97);
     }
 }

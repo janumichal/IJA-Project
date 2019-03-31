@@ -319,14 +319,14 @@ public class Board {
     private int[] normalPosition(String from, String to){
         int[] array = new int[4];
         array[0] = convertCharToIndex(from.charAt(0));
-        array[1] = BOARD_SIZE - (from.charAt(1) - 49) -1;
+        array[1] = BOARD_SIZE - (from.charAt(1) - 48);
         array[2] = convertCharToIndex(to.charAt(0));
-        array[3] = BOARD_SIZE - (to.charAt(1) - 49) -1;
+        array[3] = BOARD_SIZE - (to.charAt(1) - 48);
         return array;
     }
 
     private int convertCharToIndex(char character){
-        return (((int) Character.toUpperCase(character)))-65;
+        return (((int) character))-65;
     }
 
 
