@@ -32,14 +32,10 @@ public class Move {
         this.is_bishop = false;
         this.is_pawn = false;
         this.is_rook = false;
-
     }
 
 
-    public void setMove(Field from, Field to){
-        setFrom(from);
-        setTo(to);
-    }
+
 
     public char getExchange() {
         return exchange;

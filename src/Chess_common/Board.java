@@ -35,23 +35,7 @@ public class Board {
 
     // ################################################# CORDINATES MOVE ###############################################
     // moves piece from position1 to position2
-    public HistoryItem movePiece(String from_to){
-        int[] cordiantes_array = new int[4];
-        cordiantes_array = seperateFromTo(from_to);
-
-        if (cordiantes_array == null){
-            System.out.println("coordinates err");
-            // TODO WINDOW POPUP
-            return null;
-        }
-        if (checkCoordinates(cordiantes_array)){
-            System.out.println("coordinates not valid number,letter");
-            // TODO WINDOW POPUP
-            return null;
-        }
-
-        Field from = getField(cordiantes_array[0], cordiantes_array[1]);
-        Field to = getField(cordiantes_array[2], cordiantes_array[3]);
+    public HistoryItem movePiece(Field from, Field to){
 
         Piece player = from.getPiece();
         Piece target = to.getPiece();
@@ -73,7 +57,7 @@ public class Board {
 
 
         if (player instanceof Pawn){ // MOVE PAWN
-            if(((Pawn) player).isMoveValid(cordiantes_array[2], cordiantes_array[3], target)){
+            if(((Pawn) player).isMoveValid(to.getCol(), to.getRow(), target)){
                 movePawn(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
@@ -81,7 +65,7 @@ public class Board {
                 return null;
             }
         }else if(player instanceof Rook){ // MOVE ROOK
-            if (((Rook) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+            if (((Rook) player).isMoveValid(to.getCol(), to.getRow())){
                 moveRook(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
@@ -89,7 +73,7 @@ public class Board {
                 return null;
             }
         }else if (player instanceof Knight){ // MOVE KNIGHT
-            if (((Knight) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+            if (((Knight) player).isMoveValid(to.getCol(), to.getRow())){
                 moveKnight(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
@@ -97,7 +81,7 @@ public class Board {
                 return null;
             }
         }else if(player instanceof Bishop){ // MOVE BISHOP
-            if (((Bishop) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+            if (((Bishop) player).isMoveValid(to.getCol(), to.getRow())){
                 moveBishop(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
@@ -105,7 +89,7 @@ public class Board {
                 return null;
             }
         }else if(player instanceof King){
-            if (((King) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+            if (((King) player).isMoveValid(to.getCol(), to.getRow())){
                 moveKing(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
@@ -113,7 +97,7 @@ public class Board {
                 return null;
             }
         }else if(player instanceof Queen){
-            if (((Queen) player).isMoveValid(cordiantes_array[2], cordiantes_array[3])){
+            if (((Queen) player).isMoveValid(to.getCol(), to.getRow())){
                 moveQueen(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
@@ -266,69 +250,19 @@ public class Board {
         }
     }
 
-    public void moveHistory(Field from, Field to, Piece target){
+    public void moveHistory(Field from, Field to, Piece target, Piece exchange){
         Piece piece = to.removePiece();
-        from.putPiece(piece);
+        if (exchange == null){
+            from.putPiece(piece);
+        }else{
+            if (piece instanceof Pawn){
+                from.putPiece(exchange);
+            }else {
+                from.putPiece(new Pawn(from.getCol(), from.getRow(), piece.getColor()));
+            }
+        }
         to.putPiece(target);
     }
-
-    //check if coordinates are on board
-    private boolean checkCoordinates(int[] array){
-        boolean is_not_valid = false;
-        for (int i = 0; i < 4; i++){
-            if (array[i] > 7 || array[i] < 0){
-                is_not_valid = true;
-            }
-        }
-        return is_not_valid;
-    }
-
-    //seperates coordinates FROM and coordinate TO
-    private int[] seperateFromTo(String from_to){ // TODO COORDS
-        String from, to;
-        if(from_to.length() == 4 || from_to.length() == 5){ // normal positions
-            if (from_to.length() == 5){
-//                char piece_symbol = from_to.charAt(0); // if needed
-                from = from_to.substring(1,3);
-                to = from_to.substring(3);
-            }else {
-                from = from_to.substring(0,2);
-                to = from_to.substring(2);
-            }
-            return normalPosition(from, to);
-        }else if (from_to.length() == 2 || from_to.length() == 3){ // simplified positions
-            if (from_to.length() == 3){
-//                char piece_symbol = from_to.charAt(0); // if needed
-                to = from_to.substring(1);
-                return simplePosition(to);
-            }else {
-                to = from_to;
-                return simplePosition(to);
-            }
-        }
-        return null;
-    }
-
-    // converts coordinates to int array with on board indexes
-    // TODO simple position
-    private int[] simplePosition(String move_to){
-        return null;
-    }
-
-    // converts coordinates to int array with on board indexes
-    private int[] normalPosition(String from, String to){
-        int[] array = new int[4];
-        array[0] = convertCharToIndex(from.charAt(0));
-        array[1] = BOARD_SIZE - (from.charAt(1) - 48);
-        array[2] = convertCharToIndex(to.charAt(0));
-        array[3] = BOARD_SIZE - (to.charAt(1) - 48);
-        return array;
-    }
-
-    private int convertCharToIndex(char character){
-        return (((int) character))-65;
-    }
-
 
     //############################################# CREATING BOARD #####################################################
     // show piece placement in text mode
