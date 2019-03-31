@@ -99,9 +99,11 @@ public class Game {
 
     }
 
+    // VALIDATION OF MOVE FORMAT
+
     public boolean validFormat(String coordinates){
         System.out.println(coordinates); // TODO DEL LATER
-        if (coordinates.length() < 2 || coordinates.length() > 6){
+        if (coordinates.length() < 2){
             System.out.println("INVALID LENGTH OF COORDINATES");
         }else {
             int counter = 0;
@@ -112,20 +114,10 @@ public class Game {
                 case 'V':
                 case 'S':
                 case 'J':
-                    break;
-                case 'x': // is x (FIRST CHAR) simplified version
-                    return isValidFromTakeToEnd(coordinates, sign, counter);
-                default: // TODO HEEEEEEEEEEEEEEERRRRRRRWEEEEEEE
-                    if (((int)sign) > 96 && ((int)sign) < 105){ // is a,b,c,d,e,f,g,h (FIRST CHAR)
-                        System.out.println("FIRST IS OK");
-                        sign = coordinates.charAt(counter++);
-                        if (((int)sign) > 48 && ((int)sign) < 57){
-                            System.out.println("SECOND IS OK");
-                            return true;
-                        }
-                    }else if (((int)sign) > 48 && ((int)sign) < 57){ // is 1,2,3,4,5,6,7,8 (FIRST CHAR) simplified version
-                        return true;
-                    }
+                    sign = coordinates.charAt(counter++);
+                    return isBody(coordinates, sign, counter);
+                default:
+                    return isBody(coordinates, sign, counter);
             }
         }
         return false;
@@ -146,22 +138,20 @@ public class Game {
     }
 
     public boolean isValidFromTakeToEnd(String coordinates, char sign, int counter){
-        if (coordinates.length() < 3){
-            return false;
-        }
-        System.out.println("FIRST IS OK");
-        sign = coordinates.charAt(counter++);
         if (!isValidSign(sign)){ // is a,b,c,d,e,f,g,h (SECOND CHAR) simplified version
-            System.out.println("SECOND IS NOT OK");
+            System.out.println(sign + " IS NOT OK");
             return false;
         }else {
-            System.out.println("SECOND IS OK");
+            System.out.println(sign + " IS OK");
+            if (coordinates.length() < counter){
+                return false;
+            }
             sign = coordinates.charAt(counter++);
             if (!isValidNumber(sign)){
-                System.out.println("THIRD IS NOT OK");
+                System.out.println(sign + " IS NOT OK");
                 return false;
             }else {
-                System.out.println("THIRD IS OK");
+                System.out.println(sign + " IS OK");
                 if (coordinates.length() > counter){
                     sign = coordinates.charAt(counter++);
                     switch (sign){
@@ -172,21 +162,31 @@ public class Game {
                             if (coordinates.length() > counter){
                                 sign = coordinates.charAt(counter++);
                                 if (sign == '#' || sign == '+'){
-                                    System.out.println("FIFTH IS OK");
+                                    System.out.println(sign + " IS OK");
+                                    if (coordinates.length() > counter){
+                                        sign = coordinates.charAt(counter++);
+                                        System.out.println(sign + " IS NOT OK");
+                                        return false;
+                                    }
                                     return true;
                                 }
-                                System.out.println("FIFTH IS NOT OK");
+                                System.out.println(sign + " IS NOT OK");
                                 return false;
                             }else {
-                                System.out.println("FOURTH IS OK");
+                                System.out.println(sign + " IS OK");
                                 return true;
                             }
                         case '#':
                         case '+':
-                            System.out.println("FOURTH IS OK");
+                            System.out.println(sign + " IS OK");
+                            if (coordinates.length() > counter){
+                                sign = coordinates.charAt(counter++);
+                                System.out.println(sign + " IS NOT OK");
+                                return false;
+                            }
                             return true;
                         default:
-                            System.out.println("FOURTH IS NOT OK");
+                            System.out.println(sign + " IS NOT OK");
                             return false;
                     }
                 }else {
@@ -196,4 +196,67 @@ public class Game {
         }
     }
 
+    public boolean isBody(String coordinates, char sign, int counter){
+        if (isValidSign(sign)){ // is a,b,c,d,e,f,g,h (FIRST CHAR)
+            System.out.println(sign + " IS OK");
+            if (coordinates.length() <= counter){
+                return false;
+            }
+            sign = coordinates.charAt(counter++);
+            if (isValidNumber(sign)){ // is 1,2,3,4,5,6,7,8
+                System.out.println(sign + " IS OK");
+                if (coordinates.length() <= counter){
+                    return true;
+                }
+                sign = coordinates.charAt(counter++);
+                if (sign == 'x'){
+                    System.out.println(sign + " IS OK");
+                    if (coordinates.length() <= counter){
+                        return false;
+                    }
+                    sign = coordinates.charAt(counter++);
+                    return isValidFromTakeToEnd(coordinates, sign, counter);
+                }else if (isValidSign(sign)){
+                    return isValidFromTakeToEnd(coordinates, sign, counter);
+                }else {
+                    return false;
+                }
+            }else if (sign == 'x'){
+                System.out.println(sign + " IS OK");
+                if (coordinates.length() <= counter){
+                    return false;
+                }
+                sign = coordinates.charAt(counter++);
+                return isValidFromTakeToEnd(coordinates, sign, counter);
+            }else if (isValidSign(sign)){
+                return isValidFromTakeToEnd(coordinates, sign, counter);
+            }else {
+                return false;
+            }
+        }else if (isValidNumber(sign)){ // is 1,2,3,4,5,6,7,8 (FIRST CHAR) simplified version DONE
+            System.out.println(sign + " IS OK");
+            sign = coordinates.charAt(counter++);
+            if(isValidSign(sign)){ // is a,b,c,d,e,f,g,h (SECOND CHAR)
+                return isValidFromTakeToEnd(coordinates, sign, counter);
+            }else if (sign == 'x'){ // is x (SECOND CHAR)
+                System.out.println(sign + " IS OK");
+                if (coordinates.length() <= counter){
+                    return false;
+                }
+                sign = coordinates.charAt(counter++);
+                return isValidFromTakeToEnd(coordinates, sign, counter);
+            }else {
+                return false;
+            }
+        }else if (sign == 'x'){
+            if (coordinates.length() <= counter){
+                return false;
+            }
+            System.out.println(sign + " IS OK");
+            sign = coordinates.charAt(counter++);
+            return isValidFromTakeToEnd(coordinates, sign, counter);
+        }else {
+            return false;
+        }
+    }
 }

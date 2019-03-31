@@ -15,7 +15,7 @@ public class Tab {
 //        move("b6a5");
 //        move("a5a6");
 //        move("a6b7");
-        String all_moves = "1. xa3 b7b6\n";
+        String all_moves = "1. a2a4 b7b6\n";
         this.game.loadAllMoves(all_moves);
 
 
