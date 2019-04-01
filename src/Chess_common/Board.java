@@ -11,6 +11,10 @@ public class Board {
     private int white_points;
     private int black_points;
 
+    public boolean isIs_white_on_move() {
+        return is_white_on_move;
+    }
+
     // constructor creates array and fills it with pieces
     public Board(){
         this.is_white_on_move = true;
@@ -40,7 +44,7 @@ public class Board {
         Piece player = from.getPiece();
         Piece target = to.getPiece();
         if (player != null){
-            if (is_white_on_move){
+            if (this.is_white_on_move){
                 if (player.getColor() == color_piece.BLACK){
                     System.out.println("WHITE IS ON MOVE");
                     // TODO WINDOW POPUP

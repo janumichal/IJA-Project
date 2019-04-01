@@ -59,33 +59,21 @@ public class Game {
                 if (one_move.getExchange() == '\0'){
                     move(one_move.getFrom(), one_move.getTo());
                 }else{
-                    if ((one_move.getFrom().getPiece().getColor() == color_piece.WHITE && one_move.getTo().getRow() == 0)||(one_move.getTo().getPiece().getColor() == color_piece.BLACK && one_move.getTo().getRow() == 7)){
-                        if (one_move.getExchange() == 'D'){
-
-                            Queen piece = new Queen(one_move.getTo().getRow(),one_move.getTo().getCol(), one_move.getFrom().getPiece().getColor());
-
-                            HistoryItem new_item = new HistoryItem(one_move.getFrom(), one_move.getTo(), one_move.getTo().getPiece());
-                            new_item.setExchange(piece);
-                            this.history.add(new_item);
-
-                            one_move.getFrom().removePiece();
-                            one_move.getTo().putPiece(piece);
-
-
-                        }else if (one_move.getExchange() == 'V'){
-                            Rook piece = new Rook(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
-                            one_move.getFrom().removePiece();
-                            one_move.getTo().putPiece(piece);
-                        }else if (one_move.getExchange() == 'J'){
-                            Knight piece = new Knight(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
-                            one_move.getFrom().removePiece();
-                            one_move.getTo().putPiece(piece);
-                        }else if (one_move.getExchange() == 'S'){
-                            Bishop piece = new Bishop(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
-                            one_move.getFrom().removePiece();
-                            one_move.getTo().putPiece(piece);
+                    if ((one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.WHITE && one_move.getTo().getRow() == 0)||(one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.BLACK && one_move.getTo().getRow() == 7)){
+                        if (this.board.isIs_white_on_move()){
+                            if (one_move.getFrom().getPiece().getColor() == color_piece.WHITE){
+                                exchange(one_move);
+                            }else {
+                                // TODO POPUP
+                                System.out.println("MOVE WITH WRONG COLOR");
+                            }
                         }else {
-                            System.out.println("WRONGLY FORMATED MOVE WRONG PIECE");
+                            if (one_move.getFrom().getPiece().getColor() == color_piece.BLACK){
+                                exchange(one_move);
+                            }else {
+                                // TODO POPUP
+                                System.out.println("MOVE WITH WRONG COLOR");
+                            }
                         }
                     }else {
                         System.out.println("WRONGLY FORMATED MOVE WRONG PLACE");
@@ -109,14 +97,139 @@ public class Game {
         }
     }
 
+    public void exchange(Move one_move){
+        if (one_move.getExchange() == 'D'){
+            Queen piece = new Queen(one_move.getTo().getRow(),one_move.getTo().getCol(), one_move.getFrom().getPiece().getColor());
+
+            saveHistory(one_move, piece);
+
+            one_move.getFrom().removePiece();
+            one_move.getTo().putPiece(piece);
+
+        }else if (one_move.getExchange() == 'V'){
+            Rook piece = new Rook(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
+
+            saveHistory(one_move, piece);
+
+            one_move.getFrom().removePiece();
+            one_move.getTo().putPiece(piece);
+        }else if (one_move.getExchange() == 'J'){
+            Knight piece = new Knight(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
+
+            saveHistory(one_move, piece);
+
+            one_move.getFrom().removePiece();
+            one_move.getTo().putPiece(piece);
+        }else if (one_move.getExchange() == 'S'){
+            Bishop piece = new Bishop(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
+
+            saveHistory(one_move, piece);
+
+            one_move.getFrom().removePiece();
+            one_move.getTo().putPiece(piece);
+        }else {
+            System.out.println("WRONGLY FORMATED MOVE WRONG PIECE");
+        }
+    }
+
+    public void saveHistory(Move one_move, Piece piece){
+        HistoryItem new_item = new HistoryItem(one_move.getFrom(), one_move.getTo(), one_move.getTo().getPiece());
+        new_item.setExchange(piece);
+        this.history.add(new_item);
+    }
+
     public void simpleFormat(Move one_move){
 //        move(one_move.getFrom(),one_move.getTo()); TODO
+        getFromCoords(one_move);
+    }
+
+    public void getFromCoords(Move one_move){
+        if (one_move.isPawn()){
+            if (one_move.isTake()){
+                if (one_move.getColor() == color_piece.WHITE){
+                    pawnCheckTake(Field_interface.Direction.LEFT_DOWN, Field_interface.Direction.RIGHT_DOWN, one_move);
+                }else if (one_move.getColor() == color_piece.BLACK){
+                    pawnCheckTake(Field_interface.Direction.LEFT_UP, Field_interface.Direction.RIGHT_UP, one_move);
+                }
+            }else {
+                if (one_move.getColor() == color_piece.WHITE){
+                    pawnCheck(Field_interface.Direction.DOWN, one_move);
+                }else if (one_move.getColor() == color_piece.BLACK){
+                    pawnCheck(Field_interface.Direction.UP, one_move);
+                }
+            }
+        }else if (one_move.isKing()){
+            kingCheck(one_move);
+        }else if (one_move.isQueen()){
+
+        }else if (one_move.isKnight()){
+
+        }else if (one_move.isBishop()){
+
+        }else if (one_move.isRook()){
+
+        }
+    }
+
+    public void kingCheck(Move one_move){
+        Field to = one_move.getTo();
+        for (Field_interface.Direction dir : Field_interface.Direction.values()) {
+            Field tmp = to.nextField(dir);
+            if (tmp != null && tmp.getPiece() != null && tmp.getPiece() instanceof King && tmp.getPiece().getColor() == one_move.getColor()){
+                one_move.setFrom(tmp);
+                move(one_move.getFrom(), one_move.getTo());
+                break;
+            }
+        }
+        if (one_move.getFrom() == null){
+            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        }
+    }
+
+    public void pawnCheck(Field_interface.Direction dir, Move one_move){
+        Field to = one_move.getTo();
+        Field tmp = to.nextField(dir);
+
+        if (tmp != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
+            one_move.setFrom(tmp);
+            move(one_move.getFrom(), one_move.getTo());
+        }else if ((tmp = tmp.nextField(dir)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn && ((Pawn) tmp.getPiece()).getIsOnStart()){
+            one_move.setFrom(tmp);
+            move(one_move.getFrom(), one_move.getTo());
+        }else {
+            System.out.println("WRONG MOVE !!!");
+        }
+    }
+
+    public void pawnCheckTake(Field_interface.Direction dir1, Field_interface.Direction dir2, Move one_move){
+        Field to = one_move.getTo();
+        Field tmp;
+        if ((tmp = to.nextField(dir1)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
+            one_move.setFrom(tmp);
+            move(one_move.getFrom(), one_move.getTo());
+        }else if ((tmp = to.nextField(dir2)) != null && tmp.getPiece() != null){
+            if (tmp.getPiece() instanceof Pawn){
+                one_move.setFrom(tmp);
+                move(one_move.getFrom(), one_move.getTo());
+            }
+        }else {
+            System.out.println("WRONG MOVE !!!");
+        }
     }
 
     public void move(Field from, Field to){
         if (!isAuto_mode()){
             delFromIndex();
-            this.loaded_moves.add(createMove(from, to));
+
+            Move move = createMove(from, to);
+
+            if (this.loaded_moves.size() % 2 == 0){
+                move.setColor(color_piece.WHITE);
+            }else {
+                move.setColor(color_piece.BLACK);
+            }
+
+            this.loaded_moves.add(move);
 
         }
         item = this.board.movePiece(from, to);
@@ -131,12 +244,12 @@ public class Game {
 
     public Move createMove(Field from, Field to){
         Move new_move = new Move();
-        char from_x = (char)(97 + from.getCol());
-        char from_y =  (char)((8 - from.getRow())+'0');
+        int from_x = from.getCol();
+        int from_y =  from.getRow();
         new_move.setFrom(new Field(from_x, from_y));
 
-        char to_x = (char)(97 + to.getCol());
-        char to_y =  (char)((8 - to.getRow())+'0');
+        int to_x = to.getCol();
+        int to_y = to.getRow();
         new_move.setTo(new Field(to_x, to_y));
 
         if (to.getPiece() != null){
@@ -207,16 +320,28 @@ public class Game {
                 }else {
                     String[] arr_cord = splited[1].trim().split(" ");
                     int move_length = arr_cord.length;
-                    if (move_length != 2){
+                    if (move_length > 2 || move_length < 1){
                         System.out.println("INVALID NUMBER OF MOVES");
                         break;
                     }else {
                         String white = arr_cord[0];
-                        String black = arr_cord[1];
 
-                        if (validFormat(white) && validFormat(black)) {
-                            this.loaded_moves.add(formatMove(white));
-                            this.loaded_moves.add(formatMove(black));
+                        if (validFormat(white)) {
+                            Move w_move = formatMove(white);
+                            w_move.setColor(color_piece.WHITE);
+                            this.loaded_moves.add(w_move);
+                            if (move_length > 1 ){
+                                String black = arr_cord[1];
+
+                                if (validFormat(black)){
+                                    Move b_move = formatMove(black);
+                                    b_move.setColor(this.loaded_moves.size() % 2 == 0 ? color_piece.WHITE : color_piece.BLACK);
+                                    this.loaded_moves.add(b_move);
+                                }else {
+                                    System.out.println("FORMAT NOT VALID");
+                                    break;
+                                }
+                            }
                         }else{
                             System.out.println("FORMAT NOT VALID");
                             break;
@@ -226,6 +351,26 @@ public class Game {
             }
         }else {
             this.auto_mode = false;
+        }
+        printAllMoves();
+    }
+
+    public void printAllMoves(){
+        int counter = 1;
+        int arr_size = this.loaded_moves.size();
+        for (int idx = 0; idx < arr_size ; idx++){
+
+            boolean even = idx % 2 == 0;
+            String move = this.loaded_moves.get(idx).pritnMove();
+            if (even){
+                System.out.print(counter + ". " + move + " ("+ idx + ") ");
+                if (idx+1 == arr_size){
+                    System.out.println();
+                }
+            }else {
+                System.out.print(move + " ("+ idx + ") \n");
+                counter++;
+            }
         }
     }
 
@@ -268,6 +413,8 @@ public class Game {
                 move.setRow(sign);
                 if (coordinates.length() <= counter){
                     move.setTo(this.board.getField(move.getColumn(), move.getRow()));
+                    move.setColumn(-1);
+                    move.setRow(-1);
                     return move;
                 }
                 move.setFrom(this.board.getField(move.getColumn(), move.getRow()));
@@ -309,6 +456,8 @@ public class Game {
         sign = coordinates.charAt(counter++);
         move.setRow(sign);
         move.setTo(this.board.getField(move.getColumn(),move.getRow()));
+        move.setColumn(-1);
+        move.setRow(-1);
         if (coordinates.length() > counter){
             sign = coordinates.charAt(counter++);
             switch (sign){

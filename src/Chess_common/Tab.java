@@ -7,31 +7,19 @@ public class Tab {
 
     public Tab() {
         this.game = new Game();
-//        String all_moves = "1. a2a4 b7b6\n" +
-//                "2. a4a5 Jb8a6\n" +
-//                "3. a5xb6 c7c6\n" +
-//                "4. b6b7 c6c5\n" +
-//                "5. b7b8D c5c4";
+        String all_moves = "1. e4 b7b6\n" +
+                "2. a4a5 Jb8a6\n" +
+                "3. a5xb6 c7c6\n" +
+                "4. b6b7 c6c5\n" +
+                "5. b7b8D c5c4";
 
-        this.game.loadAllMoves("");
-
-        next();
-        next();
+        this.game.loadAllMoves(all_moves);
 
         next();
         next();
 
-        next();
-        next();
-
-        next();
-        next();
-
-        next();
-
-        Field f1 = this.game.board.getField(0,6);
-        Field f2 = this.game.board.getField(0,5);
-        move(f1, f2);
+        System.out.println();
+        this.game.printAllMoves();
 
 
         this.game.board.showPiecesText();

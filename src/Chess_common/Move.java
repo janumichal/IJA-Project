@@ -1,6 +1,6 @@
 package Chess_common;
 
-import Chess_pieces.Piece;
+import enums.color_piece;
 
 public class Move {
     private Field from;
@@ -8,10 +8,12 @@ public class Move {
     private boolean is_take;
     private boolean is_check;
     private boolean is_mat;
+    private color_piece color;
 
     private boolean is_king;
     private boolean is_queen;
     private boolean is_bishop;
+
     private boolean is_knight;
     private boolean is_pawn;
     private boolean is_rook;
@@ -22,6 +24,8 @@ public class Move {
     private char exchange;
 
     public Move() {
+        this.column = -1;
+        this.row = -1;
         this.is_take = false;
         this.is_check = false;
         this.is_mat = false;
@@ -34,7 +38,62 @@ public class Move {
         this.is_rook = false;
     }
 
+    public void setColor(color_piece color) {
+        this.color = color;
+    }
 
+    public color_piece getColor() {
+        return color;
+    }
+
+    public String pritnMove(){
+        StringBuffer output = new StringBuffer();
+        if (isKing()){
+            output.append('K');
+        }else if (isQueen()){
+            output.append('D');
+        }else if (isKnight()){
+            output.append('J');
+        }else if (isBishop()){
+            output.append('S');
+        }else if (isRook()){
+            output.append('V');
+        }
+
+        if (this.from != null){
+            char x = (char)(this.from.getCol() + 97);
+            char y = (char)(8 - this.from.getRow() + 48);
+            output.append(x);
+            output.append(y);
+
+        }else {
+            if (this.column != -1){
+                char znak = (char)(this.column + 97); // COLUMN WRONG
+                output.append(znak);
+            }else if (this.row != -1){
+                char znak = (char)(8 - this.row + 48); // COLUMN WRONG
+                output.append(znak);
+            }
+        }
+
+        if (isTake()){
+            output.append('x');
+        }
+
+        char x = (char)(this.to.getCol() + 97);
+        char y = (char)(8 - this.to.getRow() + 48);
+        output.append(x);
+        output.append(y);
+        if (this.getExchange() != '\0'){
+            output.append(this.getExchange());
+        }
+        if (isMat()){
+            output.append('#');
+        }else if (isCheck()){
+            output.append('+');
+        }
+        return output.toString();
+    }
 
 
     public char getExchange() {
@@ -137,8 +196,16 @@ public class Move {
         this.column = ((int)column - 97);
     }
 
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
     public void setRow(char row) {
         this.row = 8 - ((int)row - 48);
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 
     public int getColumn() {

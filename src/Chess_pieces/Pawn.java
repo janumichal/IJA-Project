@@ -32,7 +32,9 @@ public class Pawn extends Piece {
             }
         }
     }
-
+    public boolean getIsOnStart(){
+        return this.is_on_starting_position;
+    }
     private void setNotOnStart() {
         this.is_on_starting_position = false;
     }
