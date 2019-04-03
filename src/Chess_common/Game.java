@@ -40,8 +40,9 @@ public class Game {
     }
 
     public void next(){
-        applyMove();
-        this.index++;
+        if (this.loaded_moves.size() > 0 && this.index < this.loaded_moves.size()){
+            applyMove();
+        }
     }
 
     public void applyMove(){
@@ -58,6 +59,7 @@ public class Game {
             if (one_move.isPawn() && one_move.getFrom().getPiece() instanceof Pawn) {
                 if (one_move.getExchange() == '\0'){
                     move(one_move.getFrom(), one_move.getTo());
+                    this.index++;
                 }else{
                     if ((one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.WHITE && one_move.getTo().getRow() == 0)||(one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.BLACK && one_move.getTo().getRow() == 7)){
                         if (this.board.isIs_white_on_move()){
@@ -81,14 +83,19 @@ public class Game {
                 }
             }else if (one_move.isKnight() && one_move.getFrom().getPiece() instanceof Knight) {
                 move(one_move.getFrom(), one_move.getTo());
+                this.index++;
             }else if (one_move.isKing() && one_move.getFrom().getPiece() instanceof King){
                 move(one_move.getFrom(), one_move.getTo());
+                this.index++;
             }else if (one_move.isQueen() && one_move.getFrom().getPiece() instanceof Queen){
                 move(one_move.getFrom(), one_move.getTo());
+                this.index++;
             }else if (one_move.isBishop() && one_move.getFrom().getPiece() instanceof Bishop){
                 move(one_move.getFrom(), one_move.getTo());
+                this.index++;
             }else if (one_move.isRook() && one_move.getFrom().getPiece() instanceof Rook){
                 move(one_move.getFrom(), one_move.getTo());
+                this.index++;
             }else {
                 System.out.println("WRONGLY FORMATED MOVE");
             }
@@ -105,6 +112,7 @@ public class Game {
 
             one_move.getFrom().removePiece();
             one_move.getTo().putPiece(piece);
+            this.index++;
 
         }else if (one_move.getExchange() == 'V'){
             Rook piece = new Rook(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
@@ -113,6 +121,7 @@ public class Game {
 
             one_move.getFrom().removePiece();
             one_move.getTo().putPiece(piece);
+            this.index++;
         }else if (one_move.getExchange() == 'J'){
             Knight piece = new Knight(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
 
@@ -120,6 +129,7 @@ public class Game {
 
             one_move.getFrom().removePiece();
             one_move.getTo().putPiece(piece);
+            this.index++;
         }else if (one_move.getExchange() == 'S'){
             Bishop piece = new Bishop(one_move.getRow(),one_move.getColumn(), one_move.getFrom().getPiece().getColor());
 
@@ -127,6 +137,7 @@ public class Game {
 
             one_move.getFrom().removePiece();
             one_move.getTo().putPiece(piece);
+            this.index++;
         }else {
             System.out.println("WRONGLY FORMATED MOVE WRONG PIECE");
         }
@@ -139,7 +150,6 @@ public class Game {
     }
 
     public void simpleFormat(Move one_move){
-//        move(one_move.getFrom(),one_move.getTo()); TODO
         getFromCoords(one_move);
     }
 
@@ -163,12 +173,189 @@ public class Game {
         }else if (one_move.isQueen()){
 
         }else if (one_move.isKnight()){
-
+            knightCheck(one_move);
         }else if (one_move.isBishop()){
 
         }else if (one_move.isRook()){
 
         }
+    }
+
+    public void knightCheck(Move one_move){
+        Field to = one_move.getTo();
+        if (one_move.isTake() && to.getPiece() != null || !one_move.isTake() && to.getPiece() == null){
+            if (one_move.getColumn() == -1 && one_move.getRow() == -1){
+                knightCheckAllmoves(one_move, to);
+            }else if (one_move.getColumn() != -1){
+                knightCheckColumn(one_move, to);
+            }else if (one_move.getRow() != -1){
+                knightCheckRow(one_move, to);
+            }
+        }else {
+            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        }
+    }
+
+    public void knightCheckRow(Move move, Field to){
+        if (move.getRow() != to.getRow()){
+            if (move.getRow() < to.getRow()){ //from (UP) to (DOWN)
+                knightCheckRowN(to, move, Field_interface.Direction.UP);
+            }else if (move.getRow() > to.getRow()){ // from (DOWN) to (UP)
+                knightCheckRowN(to, move, Field_interface.Direction.DOWN);
+            }
+        }else {
+            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        }
+    }
+
+    public void knightCheckRowN(Field to, Move move, Field_interface.Direction dir){
+        Field from;
+        int adder = dir == Field_interface.Direction.UP ? -1 : +1;
+        int adder2 = dir == Field_interface.Direction.UP ? -2 : +2;
+
+        if ((to.getRow() + adder) == move.getRow()){
+            from = to.nextField(dir);
+            if (from.nextField(Field_interface.Direction.LEFT) != null) {
+                from = from.nextField(Field_interface.Direction.LEFT);
+                if ((from = from.nextField(Field_interface.Direction.LEFT)) != null && from.getPiece() != null && from.getPiece() instanceof Knight) {
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+            from = to.nextField(dir);
+            if (from.nextField(Field_interface.Direction.RIGHT) != null ){
+                from = from.nextField(Field_interface.Direction.RIGHT);
+                if ((from = from.nextField(Field_interface.Direction.RIGHT)) != null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+        }else if ((to.getRow() + adder2) == move.getRow()){
+            from = to.nextField(dir).nextField(dir);
+            if (from.nextField(Field_interface.Direction.LEFT) != null) {
+                from = from.nextField(Field_interface.Direction.LEFT);
+                if (from.getPiece() != null && from.getPiece() instanceof Knight) {
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+            from = to.nextField(dir).nextField(dir);
+            if (from.nextField(Field_interface.Direction.RIGHT) != null){
+                from = from.nextField(Field_interface.Direction.RIGHT);
+                if (from.getPiece() != null && from.getPiece() instanceof Knight){
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+        }
+        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+    }
+
+    public void knightCheckColumn(Move move, Field to){
+        if (move.getColumn() != to.getCol()){
+            if (move.getColumn() < to.getCol()){ //from (levo) to (pravo)
+                knightCheckColumnN(to, move, Field_interface.Direction.LEFT);
+            }else if (move.getColumn() > to.getCol()){ // from (pravo) to (levo)
+                knightCheckColumnN(to, move, Field_interface.Direction.RIGHT);
+            }
+        }else {
+            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        }
+    }
+
+    public void knightCheckColumnN(Field to, Move move, Field_interface.Direction dir){
+        Field from;
+        int adder = dir == Field_interface.Direction.LEFT ? -1 : +1;
+        int adder2 = dir == Field_interface.Direction.LEFT ? -2 : +2;
+
+        if ((to.getCol() + adder) == move.getColumn()){
+            from = to.nextField(dir);
+            if (from.nextField(Field_interface.Direction.UP) != null){
+                from = from.nextField(Field_interface.Direction.UP);
+                if ((from = from.nextField(Field_interface.Direction.UP)) != null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+            from = to.nextField(dir);
+            if (from.nextField(Field_interface.Direction.DOWN) != null){
+                from = from.nextField(Field_interface.Direction.DOWN);
+                if ((from = from.nextField(Field_interface.Direction.DOWN)) != null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+        }else if ((to.getCol() + adder2) == move.getColumn()){
+            from = to.nextField(dir).nextField(dir);
+            if (from.nextField(Field_interface.Direction.UP) != null){
+                from = from.nextField(Field_interface.Direction.UP);
+                if (from.getPiece() != null && from.getPiece() instanceof Knight){
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+            from = to.nextField(dir).nextField(dir);
+            if (from.nextField(Field_interface.Direction.DOWN) != null){
+                from = from.nextField(Field_interface.Direction.DOWN);
+                if (from.getPiece() != null && from.getPiece() instanceof Knight){
+                    pieceCheckMove(from, move);
+                    return;
+                }
+            }
+        }
+        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+    }
+
+    public void knightCheckAllmoves(Move one_move, Field to){
+        Field from;
+        Field tmp;
+
+        if((tmp = to.nextField(Field_interface.Direction.UP))!= null){
+            if((from = tmp.nextField(Field_interface.Direction.LEFT_UP))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+            }else if ((from = tmp.nextField(Field_interface.Direction.RIGHT_UP))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }
+        }
+
+        if((tmp = to.nextField(Field_interface.Direction.LEFT))!= null){
+            if((from = tmp.nextField(Field_interface.Direction.LEFT_UP))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }else if ((from = tmp.nextField(Field_interface.Direction.LEFT_DOWN))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }
+        }
+
+        if((tmp = to.nextField(Field_interface.Direction.DOWN))!= null){
+            if((from = tmp.nextField(Field_interface.Direction.RIGHT_DOWN))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }else if ((from = tmp.nextField(Field_interface.Direction.LEFT_DOWN))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }
+        }
+
+        if((tmp = to.nextField(Field_interface.Direction.RIGHT))!= null){
+            if((from = tmp.nextField(Field_interface.Direction.RIGHT_DOWN))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }else if ((from = tmp.nextField(Field_interface.Direction.RIGHT_UP))!= null && from.getPiece() != null && from.getPiece() instanceof Knight){
+                pieceCheckMove(from,one_move);
+                return;
+            }
+        }
+
+        System.out.println("WRONG MOVE !!!");
+    }
+
+    public void pieceCheckMove(Field from, Move one_move){
+        one_move.setFrom(from);
+        move(one_move.getFrom(), one_move.getTo());
+        this.index++;
     }
 
     public void kingCheck(Move one_move){
@@ -178,6 +365,7 @@ public class Game {
             if (tmp != null && tmp.getPiece() != null && tmp.getPiece() instanceof King && tmp.getPiece().getColor() == one_move.getColor()){
                 one_move.setFrom(tmp);
                 move(one_move.getFrom(), one_move.getTo());
+                this.index++;
                 break;
             }
         }
@@ -191,29 +379,39 @@ public class Game {
         Field tmp = to.nextField(dir);
 
         if (tmp != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
-            one_move.setFrom(tmp);
-            move(one_move.getFrom(), one_move.getTo());
+            pieceCheckMove(tmp, one_move);
         }else if ((tmp = tmp.nextField(dir)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn && ((Pawn) tmp.getPiece()).getIsOnStart()){
-            one_move.setFrom(tmp);
-            move(one_move.getFrom(), one_move.getTo());
+            pieceCheckMove(tmp, one_move);
         }else {
             System.out.println("WRONG MOVE !!!");
         }
     }
 
-    public void pawnCheckTake(Field_interface.Direction dir1, Field_interface.Direction dir2, Move one_move){
+    public void pawnCheckTake(Field_interface.Direction dir1, Field_interface.Direction dir2, Move one_move){ // LEFT RIGHT
         Field to = one_move.getTo();
         Field tmp;
-        if ((tmp = to.nextField(dir1)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
-            one_move.setFrom(tmp);
-            move(one_move.getFrom(), one_move.getTo());
-        }else if ((tmp = to.nextField(dir2)) != null && tmp.getPiece() != null){
-            if (tmp.getPiece() instanceof Pawn){
-                one_move.setFrom(tmp);
-                move(one_move.getFrom(), one_move.getTo());
+        if (one_move.getColumn() == -1){
+            if ((tmp = to.nextField(dir1)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
+                pieceCheckMove(tmp, one_move);
+            }else if ((tmp = to.nextField(dir2)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
+                pieceCheckMove(tmp, one_move);
+            }else {
+                System.out.println("WRONG MOVE !!!"); // TODO POPUP
             }
         }else {
-            System.out.println("WRONG MOVE !!!");
+            if (one_move.getColumn() < one_move.getTo().getCol()){
+                if ((tmp = to.nextField(dir1)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
+                    pieceCheckMove(tmp, one_move);
+                }else{
+                    System.out.println("WRONG MOVE !!!"); // TODO POPUP
+                }
+            }else if (one_move.getColumn() > one_move.getTo().getCol()){
+                if ((tmp = to.nextField(dir2)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
+                    pieceCheckMove(tmp, one_move);
+                }else{
+                    System.out.println("WRONG MOVE !!!"); // TODO POPUP
+                }
+            }
         }
     }
 
@@ -343,6 +541,7 @@ public class Game {
                                 }
                             }
                         }else{
+                            System.out.println("err");
                             System.out.println("FORMAT NOT VALID");
                             break;
                         }
@@ -411,20 +610,32 @@ public class Game {
             sign = coordinates.charAt(counter++);
             if (isValidNumber(sign)){ // is 1,2,3,4,5,6,7,8
                 move.setRow(sign);
+
                 if (coordinates.length() <= counter){
                     move.setTo(this.board.getField(move.getColumn(), move.getRow()));
                     move.setColumn(-1);
                     move.setRow(-1);
+
                     return move;
                 }
-                move.setFrom(this.board.getField(move.getColumn(), move.getRow()));
+
                 sign = coordinates.charAt(counter++);
                 if (sign == 'x'){
+                    move.setFrom(this.board.getField(move.getColumn(), move.getRow()));
+                    move.setColumn(-1);
+                    move.setRow(-1);
+
                     move.setTake();
                     sign = coordinates.charAt(counter++);
                     return isValidFromTakeToEndMove(coordinates, sign, counter, move);
                 }else if (isValidSign(sign)){
+                    move.setFrom(this.board.getField(move.getColumn(), move.getRow()));
                     return isValidFromTakeToEndMove(coordinates, sign, counter, move);
+                }else {
+                    move.setTo(this.board.getField(move.getColumn(), move.getRow()));
+                    move.setColumn(-1);
+                    move.setRow(-1);
+                    return endSwitchFormatMove(coordinates, counter, sign, move);
                 }
             }else if (sign == 'x'){
                 move.setTake();
@@ -452,40 +663,42 @@ public class Game {
     }
 
     public Move isValidFromTakeToEndMove(String coordinates, char sign, int counter, Move move){
-        move.setColumn(sign);
+        int col = setColumnI(sign);
         sign = coordinates.charAt(counter++);
-        move.setRow(sign);
-        move.setTo(this.board.getField(move.getColumn(),move.getRow()));
-        move.setColumn(-1);
-        move.setRow(-1);
+        int row = setRowI(sign);
+        move.setTo(this.board.getField(col,row));
         if (coordinates.length() > counter){
             sign = coordinates.charAt(counter++);
-            switch (sign){
-                case 'D':
-                case 'V':
-                case 'S':
-                case 'J':
-                    move.setExchange(sign);
-                    if (coordinates.length() > counter){
-                        sign = coordinates.charAt(counter++);
-                        if (sign == '#' || sign == '+'){
-                            move.setMat();
-                        }else if (sign == '+'){
-                            move.setCheck();
-                        }
-                        return move;
-                    }else {
-                        return move;
-                    }
-                case '#':
-                    move.setMat();
-                    return move;
-                case '+':
-                    move.setCheck();
-                    return move;
-            }
+            return endSwitchFormatMove(coordinates, counter, sign, move);
         }else {
             return move;
+        }
+    }
+
+    public Move endSwitchFormatMove(String coordinates, int counter, char sign, Move move){
+        switch (sign){
+            case 'D':
+            case 'V':
+            case 'S':
+            case 'J':
+                move.setExchange(sign);
+                if (coordinates.length() > counter){
+                    sign = coordinates.charAt(counter++);
+                    if (sign == '#' || sign == '+'){
+                        move.setMat();
+                    }else if (sign == '+'){
+                        move.setCheck();
+                    }
+                    return move;
+                }else {
+                    return move;
+                }
+            case '#':
+                move.setMat();
+                return move;
+            case '+':
+                move.setCheck();
+                return move;
         }
         return move;
     }
@@ -515,21 +728,17 @@ public class Game {
     }
 
     public boolean isValidSign(char Character){
-        if (((int)Character) > 96 && ((int)Character) < 105){ // is a,b,c,d,e,f,g,h
-            return true;
-        }
-        return false;
+        // is a,b,c,d,e,f,g,h
+        return ((int) Character) > 96 && ((int) Character) < 105;
     }
 
     public boolean isValidNumber(char Character){
-        if (((int)Character) > 48 && ((int)Character) < 57){ // is 1,2,3,4,5,6,7,8
-            return true;
-        }
-        return false;
+        // is 1,2,3,4,5,6,7,8
+        return ((int) Character) > 48 && ((int) Character) < 57;
     }
 
     public boolean isValidFromTakeToEnd(String coordinates, char sign, int counter){
-        if (!isValidSign(sign)){ // is a,b,c,d,e,f,g,h (SECOND CHAR) simplified version
+        if (!isValidSign(sign)){ // is a,b,c,d,e,f,g,h
             System.out.println(sign + " IS NOT OK");
             return false;
         }else {
@@ -543,46 +752,51 @@ public class Game {
             }else {
                 if (coordinates.length() > counter){
                     sign = coordinates.charAt(counter++);
-                    switch (sign){
-                        case 'D':
-                        case 'V':
-                        case 'S':
-                        case 'J':
-                            if (is_pawn == false){
-                                System.out.println("ONLY PAWN CAN EXCHANGE");
-                                return false;
-                            }
-                            if (coordinates.length() > counter){
-                                sign = coordinates.charAt(counter++);
-                                if (sign == '#' || sign == '+'){
-                                    if (coordinates.length() > counter){
-                                        sign = coordinates.charAt(counter++);
-                                        System.out.println(sign + " IS NOT OK");
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                                System.out.println(sign + " IS NOT OK");
-                                return false;
-                            }else {
-                                return true;
-                            }
-                        case '#':
-                        case '+':
-                            if (coordinates.length() > counter){
-                                sign = coordinates.charAt(counter++);
-                                System.out.println(sign + " IS NOT OK");
-                                return false;
-                            }
-                            return true;
-                        default:
-                            System.out.println(sign + " IS NOT OK");
-                            return false;
-                    }
+                    return endSwitchFormat(coordinates, sign, counter);
                 }else {
                     return true;
                 }
             }
+        }
+    }
+
+    public boolean endSwitchFormat(String coordinates, char sign, int counter){
+        switch (sign){
+            case 'D':
+            case 'V':
+            case 'S':
+            case 'J':
+                if (!this.is_pawn){
+                    System.out.println("ONLY PAWN CAN EXCHANGE");
+                    return false;
+                }
+                if (coordinates.length() > counter){
+                    sign = coordinates.charAt(counter++);
+                    if (sign == '#' || sign == '+'){
+                        if (coordinates.length() > counter){
+                            sign = coordinates.charAt(counter++);
+                            System.out.println(sign + " IS NOT OK");
+                            return false;
+                        }else {
+                            return true;
+                        }
+                    }
+                    System.out.println(sign + " IS NOT OK");
+                    return false;
+                }else {
+                    return true;
+                }
+            case '#':
+            case '+':
+                if (coordinates.length() > counter){
+                    sign = coordinates.charAt(counter++);
+                    System.out.println(sign + " IS NOT OK");
+                    return false;
+                }
+                return true;
+            default:
+                System.out.println(sign + " IS NOT OK");
+                return false;
         }
     }
 
@@ -606,7 +820,8 @@ public class Game {
                 }else if (isValidSign(sign)){
                     return isValidFromTakeToEnd(coordinates, sign, counter);
                 }else {
-                    return false;
+                    return endSwitchFormat(coordinates, sign, counter);
+
                 }
             }else if (sign == 'x'){
                 if (coordinates.length() <= counter){
@@ -643,7 +858,11 @@ public class Game {
         }
     }
 
-    public int convertCharToIndex(char col){
-        return ((int)col - 97);
+    public int setColumnI(char sign){
+        return ((int)sign - 97);
+    }
+
+    public int setRowI(char sign){
+        return 8 - ((int)sign - 48);
     }
 }

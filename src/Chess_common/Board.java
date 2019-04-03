@@ -15,6 +15,10 @@ public class Board {
         return is_white_on_move;
     }
 
+    public void printPoints(){
+        System.out.println("White: " + getWhite_points() + " Black: " + getBlack_points());
+    }
+
     // constructor creates array and fills it with pieces
     public Board(){
         this.is_white_on_move = true;
@@ -396,7 +400,7 @@ public class Board {
                             break;
                         case 6:
                             x1 = x-1;
-                            y1 = y-1;
+                            y1 = y+1;
                             if (isInArray(x1,y1)){
                                 actual_field.addNextField(Field_interface.Direction.LEFT_DOWN, this.board_array[x1][y1]);
                             }
