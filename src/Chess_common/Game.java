@@ -2,6 +2,8 @@ package Chess_common;
 
 import Chess_pieces.*;
 import enums.color_piece;
+import sun.security.jca.GetInstance;
+import sun.text.resources.en.FormatData_en_IE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,15 +173,280 @@ public class Game {
         }else if (one_move.isKing()){
             kingCheck(one_move);
         }else if (one_move.isQueen()){
-
+            queenCheck(one_move);
         }else if (one_move.isKnight()){
             knightCheck(one_move);
         }else if (one_move.isBishop()){
-
+            bishopCheck(one_move);
         }else if (one_move.isRook()){
-
+            rookCheck(one_move);
         }
     }
+
+    public void queenCheck(Move move){
+        Field to = move.getTo();
+
+        if (move.isTake() && to.getPiece() != null || !move.isTake() && to.getPiece() == null){
+            if (move.getColumn() == -1 && move.getRow() == -1){
+                if (bishopAll(move,to , "Queen")){
+                    return;
+                }
+                if (rookCheckAll(move, to, "Queen")){
+                    return;
+                }
+            }else if (move.getColumn() != -1){
+                if(bishopCheckCol(move, "Queen")){
+                    return;
+                }
+                if (rookCheckCol(move, "Queen")){
+                    return;
+                }
+            }else if (move.getRow() != -1){
+                if(bishopCheckRow(move, "Queen")){
+                    return;
+                }
+                if (rookCheckRow(move, "Queen")){
+                    return;
+                }
+            }
+        }
+        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+    }
+
+    public boolean bishopCheck(Move move){
+        Field to = move.getTo();
+
+        if (move.isTake() && to.getPiece() != null || !move.isTake() && to.getPiece() == null){
+            if (move.getColumn() == -1 && move.getRow() == -1){
+                if (bishopAll(move,to , "Bishop")){
+                    return true;
+                }
+            }else if (move.getColumn() != -1){
+                if(bishopCheckCol(move, "Bishop")){
+                    return true;
+                }
+            }else if (move.getRow() != -1){
+                if(bishopCheckRow(move, "Bishop")){
+                    return true;
+                }
+            }
+        }
+        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        return false;
+    }
+
+    public boolean bishopAll(Move move, Field to, String piece){
+        Field left_up = to.nextField(Field_interface.Direction.LEFT_UP);
+        Field right_up = to.nextField(Field_interface.Direction.RIGHT_UP);
+        Field left_down = to.nextField(Field_interface.Direction.LEFT_DOWN);
+        Field right_down = to.nextField(Field_interface.Direction.RIGHT_DOWN);
+
+        if (twoSides(left_up, Field_interface.Direction.LEFT_UP, right_up, Field_interface.Direction.RIGHT_UP, move, piece)){
+            return true;
+        }
+
+        if (twoSides(left_down, Field_interface.Direction.LEFT_DOWN, right_down, Field_interface.Direction.RIGHT_DOWN, move, piece)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean bishopCheckCol(Move move, String piece){
+        Field to = move.getTo();
+
+        if (move.getColumn() < to.getCol()){ // left
+            Field left_up = to.nextField(Field_interface.Direction.LEFT_UP);
+            Field left_down = to.nextField(Field_interface.Direction.LEFT_DOWN);
+
+            return twoSides(left_up, Field_interface.Direction.LEFT_UP, left_down, Field_interface.Direction.LEFT_DOWN, move, piece);
+
+        }else if (move.getColumn() > to.getCol()){ // right
+            Field right_up = to.nextField(Field_interface.Direction.RIGHT_UP);
+            Field right_down = to.nextField(Field_interface.Direction.RIGHT_DOWN);
+
+            return twoSides(right_up, Field_interface.Direction.RIGHT_UP, right_down, Field_interface.Direction.RIGHT_DOWN, move, piece);
+        }
+        return false;
+    }
+
+    public boolean bishopCheckRow(Move move, String piece){
+        Field to = move.getTo();
+
+        if (move.getRow() < to.getRow()){ // up
+            Field left_up = to.nextField(Field_interface.Direction.LEFT_UP);
+            Field right_up = to.nextField(Field_interface.Direction.RIGHT_UP);
+
+            return twoSides(left_up, Field_interface.Direction.LEFT_UP, right_up, Field_interface.Direction.RIGHT_UP, move, piece);
+
+        }else if (move.getRow() > to.getRow()){ // down
+            Field left_down = to.nextField(Field_interface.Direction.LEFT_DOWN);
+            Field right_down = to.nextField(Field_interface.Direction.RIGHT_DOWN);
+
+            return twoSides(left_down, Field_interface.Direction.LEFT_DOWN, right_down, Field_interface.Direction.RIGHT_DOWN, move, piece);
+        }
+        return false;
+    }
+
+    public boolean rookCheck(Move move){
+        Field to  = move.getTo();
+            if (rookCheckAll(move,to , "Rook")){
+                return true;
+            }
+        if (move.isTake() && to.getPiece() != null || !move.isTake() && to.getPiece() == null){
+            if (move.getColumn() == -1 && move.getRow() == -1){
+
+
+            }else if (move.getColumn() != -1){
+                if(rookCheckCol(move, "Rook")){
+                    return true;
+                }
+
+            }else if (move.getRow() != -1){
+                if(rookCheckRow(move, "Rook")){
+                    return true;
+                }
+
+            }
+        }
+        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        return false;
+    }
+
+    public boolean rookCheckAll(Move move,Field to, String piece){
+        Field up = to.nextField(Field_interface.Direction.UP);
+        Field down = to.nextField(Field_interface.Direction.DOWN);
+        Field left = to.nextField(Field_interface.Direction.LEFT);
+        Field right = to.nextField(Field_interface.Direction.RIGHT);
+
+        if (twoSides(up, Field_interface.Direction.UP, down, Field_interface.Direction.DOWN, move, piece)){
+            return true;
+        }
+
+        if (twoSides(left, Field_interface.Direction.LEFT, right, Field_interface.Direction.RIGHT, move, piece)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean rookCheckRow(Move move ,String piece){
+        Field to = move.getTo();
+        if (move.getRow() == to.getRow()){
+            Field left = to.nextField(Field_interface.Direction.LEFT);
+            Field right = to.nextField(Field_interface.Direction.RIGHT);
+
+            return twoSides(left, Field_interface.Direction.LEFT, right, Field_interface.Direction.RIGHT, move, piece);
+
+        }else if (move.getRow() < to.getRow()){
+            Field up = to.nextField(Field_interface.Direction.UP);
+
+            return oneSide(up, Field_interface.Direction.UP, move, piece);
+
+        }else if (move.getRow() > to.getRow()){
+            Field down = to.nextField(Field_interface.Direction.DOWN);
+
+            return oneSide(down, Field_interface.Direction.DOWN, move, piece);
+        }
+        return false;
+    }
+
+    public boolean oneSide(Field f1, Field_interface.Direction dir1, Move move, String piece){
+        while (f1 != null){
+            switch (piece){
+                case "Queen":
+                    if (f1.getPiece() != null && f1.getPiece() instanceof Queen){
+                        pieceCheckMove(f1,move);
+                        return true;
+                    }
+                    break;
+                case "Rook":
+                    if (f1.getPiece() != null && f1.getPiece() instanceof Rook){
+                        pieceCheckMove(f1,move);
+                        return true;
+                    }
+                    break;
+                case "Bishop":
+                    if (f1.getPiece() != null && f1.getPiece() instanceof Bishop){
+                        pieceCheckMove(f1,move);
+                        return true;
+                    }
+                    break;
+            }
+            f1 = f1.nextField(dir1);
+        }
+        return false;
+    }
+
+    public boolean twoSides(Field f1, Field_interface.Direction dir1, Field f2, Field_interface.Direction dir2, Move move, String piece){
+        while (f1 != null || f2 != null){
+            if (f1 != null){
+                switch (piece){
+                    case "Queen":
+                        if (f1.getPiece() != null && f1.getPiece() instanceof Queen){
+                            pieceCheckMove(f1,move);
+                            return true;
+                        }
+                        break;
+                    case "Rook":
+                        if (f1.getPiece() != null && f1.getPiece() instanceof Rook){
+                            pieceCheckMove(f1,move);
+                            return true;
+                        }
+                        break;
+                    case "Bishop":
+                        if (f1.getPiece() != null && f1.getPiece() instanceof Bishop){
+                            pieceCheckMove(f1,move);
+                            return true;
+                        }
+                        break;
+                }
+                f1 = f1.nextField(dir1);
+            }
+            if (f2 != null){
+                switch (piece){
+                    case "Queen":
+                        if (f2.getPiece() != null && f2.getPiece() instanceof Queen){
+                            pieceCheckMove(f2,move);
+                            return true;
+                        }
+                        break;
+                    case "Rook":
+                        if (f2.getPiece() != null && f2.getPiece() instanceof Rook){
+                            pieceCheckMove(f2,move);
+                            return true;
+                        }
+                        break;
+                    case "Bishop":
+                        if (f2.getPiece() != null && f2.getPiece() instanceof Bishop){
+                            pieceCheckMove(f2,move);
+                            return true;
+                        }
+                        break;
+                }
+                f2 = f2.nextField(dir2);
+            }
+        }
+        return false;
+    }
+
+    public boolean rookCheckCol(Move move, String piece){
+        Field to = move.getTo();
+        if (move.getColumn() == to.getCol()){
+            Field up = to.nextField(Field_interface.Direction.UP);
+            Field down = to.nextField(Field_interface.Direction.DOWN);
+
+            return twoSides(up, Field_interface.Direction.UP, down, Field_interface.Direction.DOWN, move, piece);
+        }else if (move.getColumn() < to.getCol()){
+            Field left = to.nextField(Field_interface.Direction.LEFT);
+
+            return oneSide(left, Field_interface.Direction.LEFT, move, piece);
+        }else if (move.getColumn() > to.getCol()){
+            Field right = to.nextField(Field_interface.Direction.RIGHT);
+
+            return oneSide(right, Field_interface.Direction.RIGHT, move, piece);
+        }
+        return false;
+    }
+
 
     public void knightCheck(Move one_move){
         Field to = one_move.getTo();

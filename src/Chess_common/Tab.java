@@ -7,8 +7,8 @@ public class Tab {
 
     public Tab() {
         this.game = new Game();
-        String all_moves = "1. e4 d5\n" +
-                "2. c4 J8f6\n" +
+        String all_moves = "1. d4 a5\n" +
+                "2. Dec3 J8f6\n" +
                 "3. cxd5 c7c6\n" +
                 "4. d5xc6 f7f5\n";
 
@@ -18,7 +18,7 @@ public class Tab {
         next();
 
         next();
-        next();
+//        next();
 
 //        next();
 //        next();
