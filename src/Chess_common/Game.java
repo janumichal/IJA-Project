@@ -64,7 +64,7 @@ public class Game {
                     this.index++;
                 }else{
                     if ((one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.WHITE && one_move.getTo().getRow() == 0)||(one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.BLACK && one_move.getTo().getRow() == 7)){
-                        if (this.board.isIs_white_on_move()){
+                        if (this.board.is_white_on_move()){
                             if (one_move.getFrom().getPiece().getColor() == color_piece.WHITE){
                                 exchange(one_move);
                             }else {

@@ -35,11 +35,11 @@ public class Field implements Field_interface{
     }
 
     public int getRow() {
-        return row;
+        return this.row;
     }
 
     public int getCol() {
-        return col;
+        return this.col;
     }
 
     // get piece placed in this field

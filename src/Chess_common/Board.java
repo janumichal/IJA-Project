@@ -7,12 +7,12 @@ public class Board {
     private static final int BOARD_SIZE = 8;
     private Field[][] board_array;
     private HistoryItem historyItem;
-    private boolean is_white_on_move;
+    private boolean white_on_move;
     private int white_points;
     private int black_points;
 
-    public boolean isIs_white_on_move() {
-        return is_white_on_move;
+    public boolean is_white_on_move() {
+        return this.white_on_move;
     }
 
     public void printPoints(){
@@ -21,7 +21,7 @@ public class Board {
 
     // constructor creates array and fills it with pieces
     public Board(){
-        this.is_white_on_move = true;
+        this.white_on_move = true;
         this.white_points = 0;
         this.black_points = 0;
 
@@ -48,7 +48,7 @@ public class Board {
         Piece player = from.getPiece();
         Piece target = to.getPiece();
         if (player != null){
-            if (this.is_white_on_move){
+            if (is_white_on_move()){
                 if (player.getColor() == color_piece.BLACK){
                     System.out.println("WHITE IS ON MOVE");
                     // TODO WINDOW POPUP
@@ -248,13 +248,13 @@ public class Board {
                 }
                 to.putPiece(piece_from);
                 this.historyItem = new HistoryItem(from, to, piece_to);
-                this.is_white_on_move = !this.is_white_on_move;
+                this.white_on_move = !this.white_on_move;
             }
         }else{
             Piece piece_from = from.removePiece();
             to.putPiece(piece_from);
             this.historyItem = new HistoryItem(from, to, null);
-            this.is_white_on_move = !this.is_white_on_move;
+            this.white_on_move = !this.white_on_move;
         }
     }
 
