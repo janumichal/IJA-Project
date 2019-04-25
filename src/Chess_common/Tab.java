@@ -83,7 +83,11 @@ public class Tab {
     }
 
     public void move(Field from, Field to){
-        this.game.setAuto_mode();
-        this.game.move(from, to);
+        if (from.getPiece() == null){
+            System.out.println("NO PIECE TO MOVE!!!"); //TODO POPUP
+        }else{
+            this.game.setAuto_mode();
+            this.game.move(from, to);
+        }
     }
 }

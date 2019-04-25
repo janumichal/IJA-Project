@@ -780,15 +780,16 @@ public class Game {
             delFromIndex();
 
             Move move = createMove(from, to);
+            if(move != null){
+                if (this.loaded_moves.size() % 2 == 0){
+                    move.setColor(color_piece.WHITE);
+                }else {
+                    move.setColor(color_piece.BLACK);
+                }
 
-            if (this.loaded_moves.size() % 2 == 0){
-                move.setColor(color_piece.WHITE);
-            }else {
-                move.setColor(color_piece.BLACK);
+                this.loaded_moves.add(move);
+                this.index++;
             }
-
-            this.loaded_moves.add(move);
-            this.index++;
         }else{
             item = this.board.movePiece(from, to);
             this.game_end = this.board.game_end;
@@ -838,19 +839,20 @@ public class Game {
         this.game_end = this.board.game_end;
         if (item != null){
             this.history.add(item);
+            if (!game_end){
+                Field king_field = findKing(to.getPiece().getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
+                if (isCheck(king_field, king_field.getPiece().getColor())){
+                    new_move.setCheck();
+                }else if(isMat(king_field, king_field.getPiece().getColor())){ //TODO NON_WORKING do later
+                    new_move.setMat();
+                }
+            }
+
+            return new_move;
         }
 
         //TODO CHACK AND MAT
-        if (!game_end){
-            Field king_field = findKing(to.getPiece().getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
-            if (isCheck(king_field, king_field.getPiece().getColor())){
-                new_move.setCheck();
-            }else if(isMat(king_field, king_field.getPiece().getColor())){ //TODO NON_WORKING do later
-                new_move.setCheck();
-            }
-        }
-
-        return new_move;
+        return null;
     }
 
     public int points(color_piece color){
