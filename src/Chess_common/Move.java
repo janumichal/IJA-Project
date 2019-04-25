@@ -43,7 +43,7 @@ public class Move {
     }
 
     public color_piece getColor() {
-        return color;
+        return this.color;
     }
 
     public String pritnMove(){
@@ -97,7 +97,7 @@ public class Move {
 
 
     public char getExchange() {
-        return exchange;
+        return this.exchange;
     }
 
     public void setExchange(char exchange) {
@@ -149,47 +149,47 @@ public class Move {
     }
 
     public Field getFrom() {
-        return from;
+        return this.from;
     }
 
     public Field getTo() {
-        return to;
+        return this.to;
     }
 
     public boolean isTake() {
-        return is_take;
+        return this.is_take;
     }
 
     public boolean isCheck() {
-        return is_check;
+        return this.is_check;
     }
 
     public boolean isMat() {
-        return is_mat;
+        return this.is_mat;
     }
 
     public boolean isKing() {
-        return is_king;
+        return this.is_king;
     }
 
     public boolean isQueen() {
-        return is_queen;
+        return this.is_queen;
     }
 
     public boolean isBishop() {
-        return is_bishop;
+        return this.is_bishop;
     }
 
     public boolean isKnight() {
-        return is_knight;
+        return this.is_knight;
     }
 
     public boolean isPawn() {
-        return is_pawn;
+        return this.is_pawn;
     }
 
     public boolean isRook() {
-        return is_rook;
+        return this.is_rook;
     }
 
     public void setColumn(char column) {
@@ -209,10 +209,10 @@ public class Move {
     }
 
     public int getColumn() {
-        return column;
+        return this.column;
     }
 
     public int getRow() {
-        return row;
+        return this.row;
     }
 }

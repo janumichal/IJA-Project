@@ -336,11 +336,11 @@ public class Board {
                     break;
                 case 3:
                     // place KING
-                    this.board_array[x][y].putPiece(new King(x, y, color));
+                    this.board_array[x][y].putPiece(new Queen(x, y, color));
                     break;
                 case (BOARD_SIZE-4):
                     // place QUEEN
-                    this.board_array[x][y].putPiece(new Queen(x, y, color));
+                    this.board_array[x][y].putPiece(new King(x, y, color));
                     break;
             }
         }

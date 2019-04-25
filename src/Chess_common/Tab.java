@@ -7,10 +7,10 @@ public class Tab {
 
     public Tab() {
         this.game = new Game();
-        String all_moves = "1. d4 a5\n" +
-                "2. Dec3 J8f6\n" +
-                "3. cxd5 c7c6\n" +
-                "4. d5xc6 f7f5\n";
+        String all_moves = "1. Jc3 a5\n" +
+                "2. Jd5 J8f6\n" +
+                "3. Jxf6# c7c6\n" +
+                "4. Dxa5 f7f5\n";
 
         this.game.loadAllMoves(all_moves);
 
@@ -18,9 +18,9 @@ public class Tab {
         next();
 
         next();
-//        next();
+        next();
 
-//        next();
+        next();
 //        next();
 //
 //        next();
@@ -59,11 +59,15 @@ public class Tab {
     }
 
     public void undo(){
-        this.game.undo();
+        if(!this.game.isAuto_mode()){
+            this.game.undo();
+        }
     }
 
     public void redo(){
-        this.game.redo();
+        if(!this.game.isAuto_mode()){
+            this.game.redo();
+        }
     }
 
     public void move(Field from, Field to){

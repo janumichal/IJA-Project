@@ -5,13 +5,14 @@ import enums.color_piece;
 import sun.security.jca.GetInstance;
 import sun.text.resources.en.FormatData_en_IE;
 
+import javax.xml.ws.WebServiceClient;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    Board board;
-    History history;
-    HistoryItem item;
+    public Board board;
+    private History history;
+    private HistoryItem item;
     private List<Move> loaded_moves; // SHOWS LOADED MOVES
     private boolean is_pawn;
     private int index; // INDEX IN MOVES
@@ -22,14 +23,13 @@ public class Game {
         this.loaded_moves = new ArrayList<>();
         this.board = new Board();
         this.history = new History();
-        HistoryItem item;
         board.fillBoard();
         this.is_pawn = false;
         this.auto_mode = true;
     }
 
     public boolean isAuto_mode() {
-        return auto_mode;
+        return this.auto_mode;
     }
 
     public void setAuto_mode() {
@@ -56,11 +56,71 @@ public class Game {
         }
     }
 
+    public Field findKing(color_piece color){
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+                Field f = this.board.getField(x,y);
+                if (f != null && f.getPiece() != null && f.getPiece() instanceof King && f.getPiece().getColor() == color){
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+
+    boolean checkMat(Move one_move){
+        if (one_move.isMat()){
+            Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
+            if(!isMat(king_field, king_field.getPiece().getColor())){
+                System.out.println("WRONG FORMAT IS NOT MAT!!!");
+                undo();
+                return false;
+            }
+        } else if(one_move.isCheck()){
+            Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
+            if(isMat(king_field, king_field.getPiece().getColor())){
+                System.out.println("WRONG FORMAT IS NOT CHECK!!!");
+                undo();
+                return false;
+            }
+            if(!isCheck(king_field, king_field.getPiece().getColor())){
+                System.out.println("WRONG FORMAT IS NOT CHECK!!!");
+                undo();
+                return false;
+            }
+        } else {
+            Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
+            if(isMat(king_field, king_field.getPiece().getColor())){
+                System.out.println("WRONG FORMAT IS MAT!!!");
+                undo();
+                return false;
+            }
+            if(isCheck(king_field, king_field.getPiece().getColor())){
+                System.out.println("WRONG FORMAT IS CHECK!!!");
+                undo();
+                return false;
+            }
+        }
+
+        if(one_move.isMat()){
+            this.loaded_moves.get(this.index).setMat();
+        }else if(one_move.isCheck()){
+            this.loaded_moves.get(this.index).setCheck();
+        }
+
+        return true;
+    }
+
     public void fullFormat(Move one_move){
         if ((one_move.isTake() && one_move.getTo().getPiece() != null) || (!one_move.isTake() && one_move.getTo().getPiece() == null)){
             if (one_move.isPawn() && one_move.getFrom().getPiece() instanceof Pawn) {
                 if (one_move.getExchange() == '\0'){
                     move(one_move.getFrom(), one_move.getTo());
+
+                    if (!checkMat(one_move)){
+                        return;
+                    }
+
                     this.index++;
                 }else{
                     if ((one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.WHITE && one_move.getTo().getRow() == 0)||(one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.BLACK && one_move.getTo().getRow() == 7)){
@@ -85,18 +145,44 @@ public class Game {
                 }
             }else if (one_move.isKnight() && one_move.getFrom().getPiece() instanceof Knight) {
                 move(one_move.getFrom(), one_move.getTo());
+
+                if (!checkMat(one_move)){
+                    return;
+                }
+
+
                 this.index++;
             }else if (one_move.isKing() && one_move.getFrom().getPiece() instanceof King){
                 move(one_move.getFrom(), one_move.getTo());
+
+                if (!checkMat(one_move)){
+                    return;
+                }
+
                 this.index++;
             }else if (one_move.isQueen() && one_move.getFrom().getPiece() instanceof Queen){
                 move(one_move.getFrom(), one_move.getTo());
+
+                if (!checkMat(one_move)){
+                    return;
+                }
+
                 this.index++;
             }else if (one_move.isBishop() && one_move.getFrom().getPiece() instanceof Bishop){
                 move(one_move.getFrom(), one_move.getTo());
+
+                if (!checkMat(one_move)){
+                    return;
+                }
+
                 this.index++;
             }else if (one_move.isRook() && one_move.getFrom().getPiece() instanceof Rook){
                 move(one_move.getFrom(), one_move.getTo());
+
+                if (!checkMat(one_move)){
+                    return;
+                }
+
                 this.index++;
             }else {
                 System.out.println("WRONGLY FORMATED MOVE");
@@ -622,6 +708,11 @@ public class Game {
     public void pieceCheckMove(Field from, Move one_move){
         one_move.setFrom(from);
         move(one_move.getFrom(), one_move.getTo());
+
+        if (!checkMat(one_move)){
+            return;
+        }
+
         this.index++;
     }
 
@@ -632,6 +723,11 @@ public class Game {
             if (tmp != null && tmp.getPiece() != null && tmp.getPiece() instanceof King && tmp.getPiece().getColor() == one_move.getColor()){
                 one_move.setFrom(tmp);
                 move(one_move.getFrom(), one_move.getTo());
+
+                if (!checkMat(one_move)){
+                    return;
+                }
+
                 this.index++;
                 break;
             }
@@ -695,7 +791,6 @@ public class Game {
             }
 
             this.loaded_moves.add(move);
-
         }
         item = this.board.movePiece(from, to);
         if (item != null){
@@ -818,7 +913,6 @@ public class Game {
         }else {
             this.auto_mode = false;
         }
-        printAllMoves();
     }
 
     public void printAllMoves(){
@@ -1027,6 +1121,185 @@ public class Game {
         }
     }
 
+    public boolean controlEX(Field f, color_piece color, char piece){
+        if(f.getPiece().getColor() != color){
+            if(piece == 'b'){
+                if(f.getPiece() instanceof Bishop || f.getPiece() instanceof Queen) {
+                    return true;
+                }
+            }else if (piece == 'r'){
+                if(f.getPiece() instanceof Rook || f.getPiece() instanceof Queen) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isCheck(Field from, color_piece color_king){ // colors
+        // Pawn
+        if (color_king == color_piece.BLACK){ // BLACK KING
+            Field left_down = from.nextField(Field_interface.Direction.LEFT_DOWN);
+            Field right_down = from.nextField(Field_interface.Direction.RIGHT_DOWN);
+            if (left_down != null && left_down.getPiece() != null && left_down.getPiece() instanceof Pawn && left_down.getPiece().getColor() == color_piece.WHITE){
+                return true;
+            }else if (right_down != null && right_down.getPiece() != null && right_down.getPiece() instanceof Pawn && right_down.getPiece().getColor() == color_piece.WHITE){
+                return true;
+            }
+        }else{ // WHITE KING
+            Field left_up = from.nextField(Field_interface.Direction.LEFT_UP);
+            Field right_up = from.nextField(Field_interface.Direction.RIGHT_UP);
+            if (left_up != null && left_up.getPiece() != null && left_up.getPiece() instanceof Pawn && left_up.getPiece().getColor() == color_piece.BLACK){
+                return true;
+            }else if (right_up != null && right_up.getPiece() != null && right_up.getPiece() instanceof Pawn && right_up.getPiece().getColor() == color_piece.BLACK){
+                return true;
+            }
+        }
+        // KNIGHT
+        int x,y;
+        x = from.getCol();
+        y = from.getRow();
+
+        Field field[] = new Field[8];
+
+        field[0] = ((x-1) >= 0 && (y-2) >= 0) ? this.board.getField(x-1,y-2) : null;
+        field[1] = ((x-1) >= 0 && (y+2) <= 7) ? this.board.getField(x-1,y+2) : null;
+
+        field[2] = ((x-2) >= 0 && (y-1) >= 0) ? this.board.getField(x-2,y-1) : null;
+        field[3] = ((x-2) >= 0 && (y+1) <= 7) ? this.board.getField(x-2,y+1) : null;
+
+        field[4] = ((x+1) <= 7 && (y-2) >= 0) ? this.board.getField(x+1,y-2) : null;
+        field[5] = ((x+1) <= 7 && (y+2) <= 7) ? this.board.getField(x+1,y+2) : null;
+
+        field[6] = ((x+2) <= 7 && (y-1) >= 0) ? this.board.getField(x+2,y-1) : null;
+        field[7] = ((x+2) <= 7 && (y+1) <= 7) ? this.board.getField(x+2,y+1) : null;
+
+        for (int i = 0; i < 8 ; i++){
+            Field fld = field[i];
+            if (fld != null && fld.getPiece() != null && fld.getPiece() instanceof Knight && fld.getPiece().getColor() != color_king){
+                return true;
+            }
+        }
+
+        // BISHOP
+        Field f1 = from.nextField(Field_interface.Direction.LEFT_UP);
+        Field f2 = from.nextField(Field_interface.Direction.LEFT_DOWN);
+        Field f3 = from.nextField(Field_interface.Direction.RIGHT_UP);
+        Field f4 = from.nextField(Field_interface.Direction.RIGHT_DOWN);
+
+        while (f1 != null || f2 != null || f3 != null || f4 != null){
+            if (f1 != null) {
+                if (f1.getPiece() != null){
+                    if(controlEX(f1, color_king, 'b')){
+                        return true;
+                    }
+                    f1 = null;
+                }else{
+                    f1 = f1.nextField(Field_interface.Direction.LEFT_UP);
+                }
+            }
+            if (f2 != null) {
+                if (f2.getPiece() != null){
+                    if(controlEX(f2, color_king, 'b')){
+                        return true;
+                    }
+                    f2 = null;
+                }else{
+                    f2 = f2.nextField(Field_interface.Direction.LEFT_DOWN);
+                }
+            }
+            if (f3 != null) {
+                if (f3.getPiece() != null){
+                    if(controlEX(f3, color_king, 'b')){
+                        return true;
+                    }
+                    f3 = null;
+                }else{
+                    f3 = f3.nextField(Field_interface.Direction.RIGHT_UP);
+                }
+            }
+            if (f4 != null) {
+                if (f4.getPiece() != null){
+                    if(controlEX(f4, color_king, 'b')){
+                        return true;
+                    }
+                    f4 = null;
+                }else{
+                    f4 = f4.nextField(Field_interface.Direction.RIGHT_DOWN);
+                }
+            }
+        }
+        // ROOK
+        f1 = from.nextField(Field_interface.Direction.LEFT);
+        f2 = from.nextField(Field_interface.Direction.UP);
+        f3 = from.nextField(Field_interface.Direction.RIGHT);
+        f4 = from.nextField(Field_interface.Direction.DOWN);
+
+        while (f1 != null || f2 != null || f3 != null || f4 != null){
+            if (f1 != null) {
+                if(f1.getPiece() != null){
+                    if(controlEX(f1, color_king, 'r')){
+                        return true;
+                    }
+                    f1 = null;
+                }else{
+                    f1 = f1.nextField(Field_interface.Direction.LEFT);
+                }
+            }
+            if (f2 != null) {
+                if(f2.getPiece() != null){
+                    if(controlEX(f2, color_king, 'r')){
+                        return true;
+                    }
+                    f2 = null;
+                }else{
+                    f2 = f2.nextField(Field_interface.Direction.UP);
+                }
+            }
+            if (f3 != null) {
+                if(f3.getPiece() != null){
+                    if(controlEX(f3, color_king, 'r')){
+                        return true;
+                    }
+                    f3 = null;
+                }else{
+                    f3 = f3.nextField(Field_interface.Direction.RIGHT);
+                }
+            }
+            if (f4 != null) {
+                if(f4.getPiece() != null){
+                    if(controlEX(f4, color_king, 'r')){
+                        return true;
+                    }
+                    f4 = null;
+                }else{
+                    f4 = f4.nextField(Field_interface.Direction.DOWN);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isMat(Field from, color_piece color_king){
+        boolean mat = true;
+        if(!isCheck(from, color_king)){
+            return false;
+        }
+        for (Field_interface.Direction dir : Field_interface.Direction.values()){
+            Field new_f = from.nextField(dir);
+            if(new_f != null){
+                if(new_f.getPiece() == null || new_f.getPiece() != null && new_f.getPiece().getColor() != color_king){
+                    mat = isCheck(new_f, color_king);
+                }
+                if (!mat){
+                    return mat;
+                }
+            }
+        }
+        return mat;
+    }
+
     public boolean endSwitchFormat(String coordinates, char sign, int counter){
         switch (sign){
             case 'D':
@@ -1041,7 +1314,7 @@ public class Game {
                     sign = coordinates.charAt(counter++);
                     if (sign == '#' || sign == '+'){
                         if (coordinates.length() > counter){
-                            sign = coordinates.charAt(counter++);
+                            sign = coordinates.charAt(counter);
                             System.out.println(sign + " IS NOT OK");
                             return false;
                         }else {
@@ -1056,7 +1329,7 @@ public class Game {
             case '#':
             case '+':
                 if (coordinates.length() > counter){
-                    sign = coordinates.charAt(counter++);
+                    sign = coordinates.charAt(counter);
                     System.out.println(sign + " IS NOT OK");
                     return false;
                 }
