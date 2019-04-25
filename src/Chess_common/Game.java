@@ -17,6 +17,7 @@ public class Game {
     private boolean is_pawn;
     private int index; // INDEX IN MOVES
     private boolean auto_mode;
+    public boolean game_end = false;
 
     public Game() {
         this.index = 0;
@@ -72,31 +73,27 @@ public class Game {
         if (one_move.isMat()){
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
             if(!isMat(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS NOT MAT!!!");
+                System.out.println("WRONG FORMAT IS NOT MAT!!!"); // TODO POPOUT
                 undo();
                 return false;
             }
+            System.out.println("IS MAT !!!"); // TODO POPOUT end game
         } else if(one_move.isCheck()){
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
-            if(isMat(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS NOT CHECK!!!");
-                undo();
-                return false;
-            }
             if(!isCheck(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS NOT CHECK!!!");
+                System.out.println("WRONG FORMAT IS NOT CHECK!!!"); // TODO POPOUT
                 undo();
                 return false;
             }
         } else {
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
             if(isMat(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS MAT!!!");
+                System.out.println("WRONG FORMAT IS MAT!!!"); // TODO POPOUT
                 undo();
                 return false;
             }
             if(isCheck(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS CHECK!!!");
+                System.out.println("WRONG FORMAT IS CHECK!!!"); // TODO POPOUT
                 undo();
                 return false;
             }
@@ -791,10 +788,13 @@ public class Game {
             }
 
             this.loaded_moves.add(move);
-        }
-        item = this.board.movePiece(from, to);
-        if (item != null){
-            this.history.add(item);
+            this.index++;
+        }else{
+            item = this.board.movePiece(from, to);
+            this.game_end = this.board.game_end;
+            if (item != null){
+                this.history.add(item);
+            }
         }
     }
 
@@ -830,9 +830,25 @@ public class Game {
             new_move.setKnight();
         }else if (from.getPiece() instanceof Rook){
             new_move.setRook();
+        }else if (from.getPiece() instanceof Pawn){
+            new_move.setPawn();
+        }
+
+        item = this.board.movePiece(from, to);
+        this.game_end = this.board.game_end;
+        if (item != null){
+            this.history.add(item);
         }
 
         //TODO CHACK AND MAT
+        if (!game_end){
+            Field king_field = findKing(to.getPiece().getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
+            if (isCheck(king_field, king_field.getPiece().getColor())){
+                new_move.setCheck();
+            }else if(isMat(king_field, king_field.getPiece().getColor())){ //TODO NON_WORKING do later
+                new_move.setCheck();
+            }
+        }
 
         return new_move;
     }

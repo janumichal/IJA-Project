@@ -9,7 +9,7 @@ public class Tab {
         this.game = new Game();
         String all_moves = "1. Jc3 a5\n" +
                 "2. Jd5 J8f6\n" +
-                "3. Jxf6# c7c6\n" +
+                "3. Jxf6+ c7c6\n" +
                 "4. Dxa5 f7f5\n";
 
         this.game.loadAllMoves(all_moves);
@@ -20,7 +20,19 @@ public class Tab {
         next();
         next();
 
-        next();
+//        next();
+        Field f1 = this.game.board.getField(3,3);
+        Field f2 = this.game.board.getField(5,2);
+        move(f1, f2);
+
+        f1 = this.game.board.getField(1,1);
+        f2 = this.game.board.getField(1,3);
+        move(f1, f2);
+//
+//        f1 = this.game.board.getField(5,2);
+//        f2 = this.game.board.getField(4,0);
+//        move(f1, f2);
+
 //        next();
 //
 //        next();
@@ -32,8 +44,8 @@ public class Tab {
 //        next();
 
 
-//        Field f1 = this.game.board.getField(2,4);
-//        Field f2 = this.game.board.getField(3,3);
+//        Field f1 = this.game.board.getField(2,1);
+//        Field f2 = this.game.board.getField(2,3);
 //        move(f1,f2);
 
 

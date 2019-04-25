@@ -10,6 +10,7 @@ public class Board {
     private boolean white_on_move;
     private int white_points;
     private int black_points;
+    public boolean game_end = false;
 
     public boolean is_white_on_move() {
         return this.white_on_move;
@@ -249,6 +250,10 @@ public class Board {
                 to.putPiece(piece_from);
                 this.historyItem = new HistoryItem(from, to, piece_to);
                 this.white_on_move = !this.white_on_move;
+                if(piece_to instanceof King){
+                    System.out.println("GAME ENDS KING TAKEN"); // TODO POPUP
+                    this.game_end = true;
+                }
             }
         }else{
             Piece piece_from = from.removePiece();
