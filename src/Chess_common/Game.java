@@ -26,15 +26,18 @@ public class Game {
         this.history = new History();
         board.fillBoard();
         this.is_pawn = false;
-        this.auto_mode = true;
     }
 
     public boolean isAuto_mode() {
         return this.auto_mode;
     }
 
-    public void setAuto_mode() {
+    public void setAuto_modeOFF() {
         this.auto_mode = false;
+    }
+
+    public void setAuto_modeON(){
+        this.auto_mode = true;
     }
 
     public void prew(){
@@ -55,6 +58,10 @@ public class Game {
         }else if (move.getTo() != null && move.getFrom() == null){
             simpleFormat(move);
         }
+    }
+
+    public void setIndex(int i){
+        this.index = i;
     }
 
     public Field findKing(color_piece color){
@@ -109,10 +116,12 @@ public class Game {
     }
 
     public void fullFormat(Move one_move){
-        if ((one_move.isTake() && one_move.getTo().getPiece() != null) || (!one_move.isTake() && one_move.getTo().getPiece() == null)){
-            if (one_move.isPawn() && one_move.getFrom().getPiece() instanceof Pawn) {
+        Field from = this.board.getField(one_move.getFrom().getCol(), one_move.getFrom().getRow());
+        Field to = this.board.getField(one_move.getTo().getCol(), one_move.getTo().getRow());
+        if ((one_move.isTake() && to.getPiece() != null) || (!one_move.isTake() && to.getPiece() == null)){
+            if (one_move.isPawn() && from.getPiece() instanceof Pawn) {
                 if (one_move.getExchange() == '\0'){
-                    move(one_move.getFrom(), one_move.getTo());
+                    move(from, to);
 
                     if (!checkMat(one_move)){
                         return;
@@ -120,16 +129,16 @@ public class Game {
 
                     this.index++;
                 }else{
-                    if ((one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.WHITE && one_move.getTo().getRow() == 0)||(one_move.getFrom().getPiece() != null && one_move.getFrom().getPiece().getColor() == color_piece.BLACK && one_move.getTo().getRow() == 7)){
+                    if ((from.getPiece() != null && from.getPiece().getColor() == color_piece.WHITE && to.getRow() == 0)||(from.getPiece() != null && from.getPiece().getColor() == color_piece.BLACK && to.getRow() == 7)){
                         if (this.board.is_white_on_move()){
-                            if (one_move.getFrom().getPiece().getColor() == color_piece.WHITE){
+                            if (from.getPiece().getColor() == color_piece.WHITE){
                                 exchange(one_move);
                             }else {
                                 // TODO POPUP
                                 System.out.println("MOVE WITH WRONG COLOR");
                             }
                         }else {
-                            if (one_move.getFrom().getPiece().getColor() == color_piece.BLACK){
+                            if (from.getPiece().getColor() == color_piece.BLACK){
                                 exchange(one_move);
                             }else {
                                 // TODO POPUP
@@ -140,8 +149,8 @@ public class Game {
                         System.out.println("WRONGLY FORMATED MOVE WRONG PLACE");
                     }
                 }
-            }else if (one_move.isKnight() && one_move.getFrom().getPiece() instanceof Knight) {
-                move(one_move.getFrom(), one_move.getTo());
+            }else if (one_move.isKnight() && from.getPiece() instanceof Knight) {
+                move(from, to);
 
                 if (!checkMat(one_move)){
                     return;
@@ -150,31 +159,31 @@ public class Game {
 
                 this.index++;
             }else if (one_move.isKing() && one_move.getFrom().getPiece() instanceof King){
-                move(one_move.getFrom(), one_move.getTo());
+                move(from, to);
 
                 if (!checkMat(one_move)){
                     return;
                 }
 
                 this.index++;
-            }else if (one_move.isQueen() && one_move.getFrom().getPiece() instanceof Queen){
-                move(one_move.getFrom(), one_move.getTo());
+            }else if (one_move.isQueen() && from.getPiece() instanceof Queen){
+                move(from, to);
 
                 if (!checkMat(one_move)){
                     return;
                 }
 
                 this.index++;
-            }else if (one_move.isBishop() && one_move.getFrom().getPiece() instanceof Bishop){
-                move(one_move.getFrom(), one_move.getTo());
+            }else if (one_move.isBishop() && from.getPiece() instanceof Bishop){
+                move(from, to);
 
                 if (!checkMat(one_move)){
                     return;
                 }
 
                 this.index++;
-            }else if (one_move.isRook() && one_move.getFrom().getPiece() instanceof Rook){
-                move(one_move.getFrom(), one_move.getTo());
+            }else if (one_move.isRook() && from.getPiece() instanceof Rook){
+                move(from, to);
 
                 if (!checkMat(one_move)){
                     return;

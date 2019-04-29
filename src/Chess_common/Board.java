@@ -316,6 +316,14 @@ public class Board {
         placePieces(color_piece.WHITE);
     }
 
+    public void cleanBoard(){
+        for (int x = 0; x < BOARD_SIZE; x++){
+            for (int y = 0; y < BOARD_SIZE; y++){
+                this.board_array[x][y].putPiece(null);
+            }
+        }
+    }
+
     // placement of pieces
     private void placePieces(color_piece color){
         boolean is_black = color == color_piece.BLACK;

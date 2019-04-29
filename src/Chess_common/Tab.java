@@ -12,7 +12,9 @@ public class Tab {
                 "3. Jxf6+ c7c6\n" +
                 "4. Dxa5 f7f5\n";
 
-        this.game.loadAllMoves(all_moves);
+        loadAllMoves(all_moves);
+        newGame();
+        start_auto();
 
         next();
         next();
@@ -20,7 +22,6 @@ public class Tab {
         next();
         next();
 
-//        next();
         Field f1 = this.game.board.getField(3,3);
         Field f2 = this.game.board.getField(5,2);
         move(f1, f2);
@@ -28,7 +29,19 @@ public class Tab {
         f1 = this.game.board.getField(1,1);
         f2 = this.game.board.getField(1,3);
         move(f1, f2);
-//
+
+        newGame();
+        start_auto();
+
+        next();
+        next();
+
+        next();
+        next();
+
+        next();
+        next();
+
 //        f1 = this.game.board.getField(5,2);
 //        f2 = this.game.board.getField(4,0);
 //        move(f1, f2);
@@ -86,8 +99,25 @@ public class Tab {
         if (from.getPiece() == null){
             System.out.println("NO PIECE TO MOVE!!!"); //TODO POPUP
         }else{
-            this.game.setAuto_mode();
+            this.game.setAuto_modeOFF();
             this.game.move(from, to);
         }
     }
+
+    public void start_auto(){ // prehrava kroky postupně z loaded_moves
+        this.game.setAuto_modeON();
+        this.game.setIndex(0);
+    }
+
+    public void loadAllMoves(String moves_input){
+        this.game.loadAllMoves(moves_input);
+    }
+
+    public void newGame(){
+        this.game.board.cleanBoard();
+        this.game.board.fillBoard();
+    }
+
 }
+
+
