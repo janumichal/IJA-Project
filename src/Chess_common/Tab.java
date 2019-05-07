@@ -3,7 +3,7 @@ package Chess_common;
 import enums.color_piece;
 
 public class Tab {
-    Game game;
+    public static Game game;
 
     public Tab() {
         this.game = new Game();
