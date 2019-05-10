@@ -1,3 +1,6 @@
+/*!
+ * @authors Michal Janů (xjanum03), Miroslav Švarc (xsvarc06)
+ */
 package Chess_common;
 
 import java.util.ArrayList;
@@ -7,11 +10,18 @@ public class History {
     private List<HistoryItem> array;
     private int pointer;
 
+    /**
+     * Creates instance of History.
+     */
     public History() {
         this.array = new ArrayList<>();
         this.pointer = 0;
     }
 
+    /**
+     * Adds item to History.
+     * @param item Item being added.
+     */
     public void add(HistoryItem item){
         int array_size = this.array.size();
         if (this.pointer <= array_size){
@@ -21,10 +31,17 @@ public class History {
         this.pointer++;
     }
 
+    /**
+     * Cleans whole History.
+     */
     private void clear(){
         this.array.subList(this.pointer, this.array.size()).clear();
     }
 
+    /**
+     * moves pointer in History back.
+     * @return HistoryItem on current index.
+     */
     public HistoryItem undo(){
         int array_size = this.array.size();
         if (!(array_size < 1)){
@@ -33,6 +50,10 @@ public class History {
         return null;
     }
 
+    /**
+     * moves pointer in History forward.
+     * @return HistoryItem on current index.
+     */
     public HistoryItem redo(){
         int array_size = this.array.size();
         if (this.pointer < array_size){

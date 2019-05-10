@@ -1,3 +1,6 @@
+/*!
+ * @authors Michal Janů (xjanum03), Miroslav Švarc (xsvarc06)
+ */
 package Chess_common;
 
 import Chess_pieces.*;
@@ -19,6 +22,9 @@ public class Game {
     private boolean auto_mode;
     public boolean game_end = false;
 
+    /**
+     * Creates instance of game.
+     */
     public Game() {
         this.index = 0;
         this.loaded_moves = new ArrayList<>();
@@ -28,29 +34,48 @@ public class Game {
         this.is_pawn = false;
     }
 
+    /**
+     * Check if is Automatic mode.
+     * @return is Automatic mode.
+     */
     public boolean isAuto_mode() {
         return this.auto_mode;
     }
 
+    /**
+     * Sets Automatic mode off.
+     */
     public void setAuto_modeOFF() {
         this.auto_mode = false;
     }
 
+    /**
+     * Sets automatic mode on.
+     */
     public void setAuto_modeON(){
         this.auto_mode = true;
     }
 
+    /**
+     * Prewious move.
+     */
     public void prew(){
         undo();
         this.index--;
     }
 
+    /**
+     * Next move.
+     */
     public void next(){
         if (this.loaded_moves.size() > 0 && this.index < this.loaded_moves.size()){
             applyMove();
         }
     }
 
+    /**
+     * Applayes move from loaded_moves.
+     */
     public void applyMove(){
         Move move = this.loaded_moves.get(this.index);
         if (move.getTo() != null && move.getFrom() != null){
@@ -60,10 +85,19 @@ public class Game {
         }
     }
 
+    /**
+     * Setter for index
+     * @param i index
+     */
     public void setIndex(int i){
         this.index = i;
     }
 
+    /**
+     * Finds King of specific color on board.
+     * @param color color of king
+     * @return pointer on king
+     */
     public Field findKing(color_piece color){
         for (int x = 0; x < 8; x++){
             for (int y = 0; y < 8; y++){
@@ -76,6 +110,11 @@ public class Game {
         return null;
     }
 
+    /**
+     * Check if is CheckMat.
+     * @param one_move move in instance format
+     * @return if is checkmat.
+     */
     boolean checkMat(Move one_move){
         if (one_move.isMat()){
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
@@ -115,6 +154,10 @@ public class Game {
         return true;
     }
 
+    /**
+     * Loads Move in full format
+     * @param one_move Loaded move.
+     */
     public void fullFormat(Move one_move){
         Field from = this.board.getField(one_move.getFrom().getCol(), one_move.getFrom().getRow());
         Field to = this.board.getField(one_move.getTo().getCol(), one_move.getTo().getRow());
@@ -198,6 +241,10 @@ public class Game {
         }
     }
 
+    /**
+     * Applayes exchange from move.
+     * @param one_move move with the exchange.
+     */
     public void exchange(Move one_move){
         if (one_move.getExchange() == 'D'){
             Queen piece = new Queen(one_move.getTo().getRow(),one_move.getTo().getCol(), one_move.getFrom().getPiece().getColor());
@@ -237,16 +284,29 @@ public class Game {
         }
     }
 
+    /**
+     * saves HistoryItem to History
+     * @param one_move move that is being saved.
+     * @param piece Exchange piece.
+     */
     public void saveHistory(Move one_move, Piece piece){
         HistoryItem new_item = new HistoryItem(one_move.getFrom(), one_move.getTo(), one_move.getTo().getPiece());
         new_item.setExchange(piece);
         this.history.add(new_item);
     }
 
+    /**
+     * Loads simplified format of move.
+     * @param one_move move that is being loading from.
+     */
     public void simpleFormat(Move one_move){
         getFromCoords(one_move);
     }
 
+    /**
+     * Gets field from and saves it to move
+     * @param one_move move is being saved in.
+     */
     public void getFromCoords(Move one_move){
         if (one_move.isPawn()){
             if (one_move.isTake()){
@@ -275,6 +335,10 @@ public class Game {
         }
     }
 
+    /**
+     * Check valid moves for Queen.
+     * @param move move with coordinates.
+     */
     public void queenCheck(Move move){
         Field to = move.getTo();
 
@@ -305,6 +369,10 @@ public class Game {
         System.out.println("WRONG MOVE !!!"); // TODO POPUP
     }
 
+    /**
+     * Check valid moves for Bishop.
+     * @param move move with coordinates.
+     */
     public boolean bishopCheck(Move move){
         Field to = move.getTo();
 
@@ -327,6 +395,13 @@ public class Game {
         return false;
     }
 
+    /**
+     * Checks all direction for move validation.
+     * @param move move with coords.
+     * @param to Field to move to.
+     * @param piece Piece that is being moved.
+     * @return
+     */
     public boolean bishopAll(Move move, Field to, String piece){
         Field left_up = to.nextField(Field_interface.Direction.LEFT_UP);
         Field right_up = to.nextField(Field_interface.Direction.RIGHT_UP);
@@ -343,6 +418,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * move validation in simplified format in with set column.
+     * @param move move with coordinates.
+     * @param piece piece that is being moved.
+     * @return if is valid move.
+     */
     public boolean bishopCheckCol(Move move, String piece){
         Field to = move.getTo();
 
@@ -361,6 +442,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * move validation in simplified format in with set row.
+     * @param move move with coordinates.
+     * @param piece piece that is being moved.
+     * @return if is valid move.
+     */
     public boolean bishopCheckRow(Move move, String piece){
         Field to = move.getTo();
 
@@ -379,6 +466,10 @@ public class Game {
         return false;
     }
 
+    /**
+     * Check valid moves for Rook.
+     * @param move move with coordinates.
+     */
     public boolean rookCheck(Move move){
         Field to  = move.getTo();
             if (rookCheckAll(move,to , "Rook")){
@@ -404,6 +495,13 @@ public class Game {
         return false;
     }
 
+    /**
+     * Checks all direction for move validation.
+     * @param move move with coords.
+     * @param to Field to move to.
+     * @param piece Piece that is being moved.
+     * @return
+     */
     public boolean rookCheckAll(Move move,Field to, String piece){
         Field up = to.nextField(Field_interface.Direction.UP);
         Field down = to.nextField(Field_interface.Direction.DOWN);
@@ -420,6 +518,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * move validation in simplified format in with set row.
+     * @param move move with coordinates.
+     * @param piece piece that is being moved.
+     * @return if is valid move.
+     */
     public boolean rookCheckRow(Move move ,String piece){
         Field to = move.getTo();
         if (move.getRow() == to.getRow()){
@@ -441,6 +545,14 @@ public class Game {
         return false;
     }
 
+    /**
+     * Check if something is not in direction
+     * @param f1 Field starts from.
+     * @param dir1 Direction goes to.
+     * @param move Move with all coordinates.
+     * @param piece Piece that is being moved
+     * @return If something is in way.
+     */
     public boolean oneSide(Field f1, Field_interface.Direction dir1, Move move, String piece){
         while (f1 != null){
             switch (piece){
@@ -468,6 +580,16 @@ public class Game {
         return false;
     }
 
+    /**
+     * Check if something is not in directions
+     * @param f1 Field starts from.
+     * @param dir1 Direction goes to.
+     * @param f2 Field starts from.
+     * @param dir2 Direction goes to.
+     * @param move Move with all coordinates.
+     * @param piece Piece that is being moved
+     * @return If something is in way.
+     */
     public boolean twoSides(Field f1, Field_interface.Direction dir1, Field f2, Field_interface.Direction dir2, Move move, String piece){
         while (f1 != null || f2 != null){
             if (f1 != null){
@@ -520,6 +642,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * move validation in simplified format in with set column.
+     * @param move move with coordinates.
+     * @param piece piece that is being moved.
+     * @return if is valid move.
+     */
     public boolean rookCheckCol(Move move, String piece){
         Field to = move.getTo();
         if (move.getColumn() == to.getCol()){
@@ -539,7 +667,10 @@ public class Game {
         return false;
     }
 
-
+    /**
+     * Check valid moves for Knight.
+     * @param move move with coordinates.
+     */
     public void knightCheck(Move one_move){
         Field to = one_move.getTo();
         if (one_move.isTake() && to.getPiece() != null || !one_move.isTake() && to.getPiece() == null){
@@ -555,6 +686,11 @@ public class Game {
         }
     }
 
+    /**
+     * move aplication in simplified format in with set row.
+     * @param move move with coordinates.
+     * @param to Position where move to.
+     */
     public void knightCheckRow(Move move, Field to){
         if (move.getRow() != to.getRow()){
             if (move.getRow() < to.getRow()){ //from (UP) to (DOWN)
@@ -567,6 +703,12 @@ public class Game {
         }
     }
 
+    /**
+     * move aplication in simplified format in with set row.
+     * @param move move with coordinates.
+     * @param to Position where move to.
+     * @param dir Direction to go to.
+     */
     public void knightCheckRowN(Field to, Move move, Field_interface.Direction dir){
         Field from;
         int adder = dir == Field_interface.Direction.UP ? -1 : +1;
@@ -610,6 +752,11 @@ public class Game {
         System.out.println("WRONG MOVE !!!"); // TODO POPUP
     }
 
+    /**
+     * move aplication in simplified format in with set column.
+     * @param move move with coordinates.
+     * @param to Position where move to.
+     */
     public void knightCheckColumn(Move move, Field to){
         if (move.getColumn() != to.getCol()){
             if (move.getColumn() < to.getCol()){ //from (levo) to (pravo)
@@ -622,6 +769,12 @@ public class Game {
         }
     }
 
+    /**
+     * move aplication in simplified format in with set column.
+     * @param move move with coordinates.
+     * @param to Position where move to.
+     * @param dir Direction to go to.
+     */
     public void knightCheckColumnN(Field to, Move move, Field_interface.Direction dir){
         Field from;
         int adder = dir == Field_interface.Direction.LEFT ? -1 : +1;
@@ -665,6 +818,11 @@ public class Game {
         System.out.println("WRONG MOVE !!!"); // TODO POPUP
     }
 
+    /**
+     * applyes move that is in simplified format
+     * @param one_move
+     * @param to
+     */
     public void knightCheckAllmoves(Move one_move, Field to){
         Field from;
         Field tmp;
@@ -711,6 +869,11 @@ public class Game {
         System.out.println("WRONG MOVE !!!");
     }
 
+    /**
+     * applyes move.
+     * @param from field to move from.
+     * @param one_move move with coordinates.
+     */
     public void pieceCheckMove(Field from, Move one_move){
         one_move.setFrom(from);
         move(one_move.getFrom(), one_move.getTo());
@@ -722,6 +885,10 @@ public class Game {
         this.index++;
     }
 
+    /**
+     * Check valid moves for King.
+     * @param move move with coordinates.
+     */
     public void kingCheck(Move one_move){
         Field to = one_move.getTo();
         for (Field_interface.Direction dir : Field_interface.Direction.values()) {
@@ -743,6 +910,10 @@ public class Game {
         }
     }
 
+    /**
+     * Check valid moves for Pawn.
+     * @param move move with coordinates.
+     */
     public void pawnCheck(Field_interface.Direction dir, Move one_move){
         Field to = one_move.getTo();
         Field tmp = to.nextField(dir);
@@ -756,6 +927,12 @@ public class Game {
         }
     }
 
+    /**
+     * application of move where pawn takes piece.
+     * @param dir1 direction to move to
+     * @param dir2 direction to move to
+     * @param one_move move with all coordinates
+     */
     public void pawnCheckTake(Field_interface.Direction dir1, Field_interface.Direction dir2, Move one_move){ // LEFT RIGHT
         Field to = one_move.getTo();
         Field tmp;
@@ -784,6 +961,11 @@ public class Game {
         }
     }
 
+    /**
+     * applyes move
+     * @param from move from
+     * @param to move to
+     */
     public void move(Field from, Field to){
         if (!isAuto_mode()){
             delFromIndex();
@@ -808,10 +990,19 @@ public class Game {
         }
     }
 
+    /**
+     * deletes moves from index to end
+     */
     public void delFromIndex(){
         this.loaded_moves.subList(index, this.loaded_moves.size()).clear();
     }
 
+    /**
+     * Creates move
+     * @param from from where to move
+     * @param to where to move to.
+     * @return move that has been saved.
+     */
     public Move createMove(Field from, Field to){
         Move new_move = new Move();
         int from_x = from.getCol();
@@ -864,6 +1055,11 @@ public class Game {
         return null;
     }
 
+    /**
+     * getter of points of specific color.
+     * @param color Color
+     * @return points
+     */
     public int points(color_piece color){
         if (color == color_piece.BLACK){
             return this.board.getBlack_points();
@@ -872,6 +1068,9 @@ public class Game {
         }
     }
 
+    /**
+     * undo move.
+     */
     public void undo(){
         HistoryItem item = history.undo();
         if (item != null){
@@ -884,6 +1083,9 @@ public class Game {
         }
     }
 
+    /**
+     * redo move.
+     */
     public void redo(){
         HistoryItem item = history.redo();
         if (item != null){
@@ -895,6 +1097,10 @@ public class Game {
         }
     }
 
+    /**
+     * loads all moves from string.
+     * @param all_moves moves in string form.
+     */
     public void loadAllMoves(String all_moves){
         if (!all_moves.equals("")){
             String[] rotation_format = all_moves.split("\n");
@@ -942,6 +1148,9 @@ public class Game {
         }
     }
 
+    /**
+     * Prints all saved moves to console.
+     */
     public void printAllMoves(){
         int counter = 1;
         int arr_size = this.loaded_moves.size();
@@ -961,6 +1170,11 @@ public class Game {
         }
     }
 
+    /**
+     * check format of one move
+     * @param coordinates move in string form
+     * @return move in Move instance
+     */
     public Move formatMove(String coordinates){
         Move move = new Move();
             int counter = 0;
@@ -992,6 +1206,14 @@ public class Game {
             }
     }
 
+    /**
+     *
+     * @param coordinates Move in string form
+     * @param sign sign from move
+     * @param counter counter of length
+     * @param move move in instance format
+     * @return move in Move instance
+     */
     public Move isBodyMove(String coordinates, char sign, int counter, Move move){
         if (isValidSign(sign)){ // is a,b,c,d,e,f,g,h (FIRST CHAR)
             move.setColumn(sign);
@@ -1050,6 +1272,14 @@ public class Game {
         return move;
     }
 
+    /**
+     *
+     * @param coordinates Move in string form
+     * @param sign sign from move
+     * @param counter counter of length
+     * @param move move in instance format
+     * @return move in Move instance
+     */
     public Move isValidFromTakeToEndMove(String coordinates, char sign, int counter, Move move){
         int col = setColumnI(sign);
         sign = coordinates.charAt(counter++);
@@ -1063,6 +1293,14 @@ public class Game {
         }
     }
 
+    /**
+     *
+     * @param coordinates Move in string form
+     * @param counter counter of length
+     * @param sign sign from move
+     * @param move move in instance format
+     * @return move in Move instance
+     */
     public Move endSwitchFormatMove(String coordinates, int counter, char sign, Move move){
         switch (sign){
             case 'D':
@@ -1091,8 +1329,15 @@ public class Game {
         return move;
     }
 
+
     // VALIDATION OF MOVE FORMAT
 
+
+    /**
+     * check valid format.
+     * @param coordinates move in string format
+     * @return if is valid.
+     */
     public boolean validFormat(String coordinates){
         if (coordinates.length() < 2){
             System.out.println("INVALID LENGTH OF COORDINATES");
@@ -1115,16 +1360,33 @@ public class Game {
         return false;
     }
 
+    /**
+     * if is valid character
+     * @param Character the character
+     * @return if is valid
+     */
     public boolean isValidSign(char Character){
         // is a,b,c,d,e,f,g,h
         return ((int) Character) > 96 && ((int) Character) < 105;
     }
 
+    /**
+     * Check if is valid number.
+     * @param Character Character that is being transfered to number.
+     * @return if is valid.
+     */
     public boolean isValidNumber(char Character){
         // is 1,2,3,4,5,6,7,8
         return ((int) Character) > 48 && ((int) Character) < 57;
     }
 
+    /**
+     * Check if move is in valid format.
+     * @param coordinates move in string format
+     * @param sign one character of string move
+     * @param counter counter of move length
+     * @return if is valid.
+     */
     public boolean isValidFromTakeToEnd(String coordinates, char sign, int counter){
         if (!isValidSign(sign)){ // is a,b,c,d,e,f,g,h
             System.out.println(sign + " IS NOT OK");
@@ -1148,6 +1410,13 @@ public class Game {
         }
     }
 
+    /**
+     * finds if moves are being valid for Bishop or Queen.
+     * @param f Field moves from
+     * @param color color of piece
+     * @param piece pointer on piece
+     * @return if move is valid
+     */
     public boolean controlEX(Field f, color_piece color, char piece){
         if(f.getPiece().getColor() != color){
             if(piece == 'b'){
@@ -1163,6 +1432,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * check if is check
+     * @param from king is on field from
+     * @param color_king color of king.
+     * @return if is check.
+     */
     public boolean isCheck(Field from, color_piece color_king){ // colors
         // Pawn
         if (color_king == color_piece.BLACK){ // BLACK KING
@@ -1308,6 +1583,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * check if is mat
+     * @param from king is on field from
+     * @param color_king color of king.
+     * @return if is mat.
+     */
     public boolean isMat(Field from, color_piece color_king){
         boolean mat = true;
         if(!isCheck(from, color_king)){
@@ -1327,6 +1608,13 @@ public class Game {
         return mat;
     }
 
+    /**
+     *  Check if move is in valid format.
+     * @param coordinates move in string format
+     * @param sign one character of string move
+     * @param counter counter of move length
+     * @return if is valid.
+     */
     public boolean endSwitchFormat(String coordinates, char sign, int counter){
         switch (sign){
             case 'D':
@@ -1367,6 +1655,13 @@ public class Game {
         }
     }
 
+    /**
+     * Check if move is in valid format.
+     * @param coordinates move in string format
+     * @param sign one character of string move
+     * @param counter counter of move length
+     * @return if is valid.
+     */
     public boolean isBody(String coordinates, char sign, int counter){
         if (isValidSign(sign)){ // is a,b,c,d,e,f,g,h (FIRST CHAR)
             if (coordinates.length() <= counter){
@@ -1425,11 +1720,22 @@ public class Game {
         }
     }
 
+    /**
+     * Setter for column in character format
+     * @param sign column in character.
+     * @return column number
+     */
     public int setColumnI(char sign){
         return ((int)sign - 97);
     }
 
+    /**
+     * Setter for row in character format
+     * @param sign row in character.
+     * @return row number
+     */
     public int setRowI(char sign){
         return 8 - ((int)sign - 48);
     }
 }
+
