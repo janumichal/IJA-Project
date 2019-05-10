@@ -9,12 +9,14 @@ import Chess_common.*;
 
 
 public class Controller {
+    Tab tab = new Tab();
+
     @FXML protected void stopGame(ActionEvent event){
         // TODO
     }
 
     @FXML protected void undo(ActionEvent event){
-        Tab.game.undo();
+        tab.undo();
     }
 
     @FXML protected void redo(ActionEvent event){
@@ -22,11 +24,12 @@ public class Controller {
     }
 
     @FXML protected void restart(ActionEvent event){
-        Tab.game = new Game();
-        //Tab.game.newGame();
+        tab.newGame();
+        tab.start_auto();
     }
 
     @FXML protected void load(ActionEvent event){
+//        tab.loadAllMoves(value);
     }
 
     @FXML protected void gameType(ActionEvent event){
