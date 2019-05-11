@@ -83,7 +83,7 @@ public class Main extends Application {
                             ((Pane)node).getChildren().add(img);
                         }
                     } else if (col == 2 || col == 5) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("view/images/../chess_figures_img/Bishop_B.png")));
+                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_B.png")));
                         if (node instanceof Pane){
                             img.setFitHeight(img_size);
                             img.setFitWidth(img_size);
