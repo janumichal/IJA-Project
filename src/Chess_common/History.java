@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * Class for History
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class History {
     private List<HistoryItem> array;

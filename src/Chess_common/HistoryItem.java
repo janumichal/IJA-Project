@@ -8,6 +8,8 @@ import Chess_pieces.Piece;
 
 /**
  * Class for History Item
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class HistoryItem {
     private Field from;

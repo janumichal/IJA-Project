@@ -7,6 +7,8 @@ import enums.color_piece;
 
 /**
  * Class for Tab
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class Tab {
     public static Game game;

@@ -7,6 +7,8 @@ import Chess_pieces.Piece;
 
 /**
  * Interface for class field
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public interface Field_interface {
     Piece getPiece();

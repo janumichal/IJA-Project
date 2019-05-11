@@ -1,7 +1,11 @@
 package Chess_pieces;
 
 import enums.color_piece;
-
+/**
+ * Class for Knight
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
+ */
 public class Knight extends Piece {
     /**
      * Class for Knight piece.

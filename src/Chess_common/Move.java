@@ -7,6 +7,8 @@ import enums.color_piece;
 
 /**
  * Class for Move
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class Move {
     private Field from;

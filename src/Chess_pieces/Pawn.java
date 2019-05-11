@@ -1,7 +1,11 @@
 package Chess_pieces;
 
 import enums.color_piece;
-
+/**
+ * Class for Pawn
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
+ */
 public class Pawn extends Piece {
     private boolean is_on_starting_position = true;
 

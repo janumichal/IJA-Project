@@ -1,7 +1,11 @@
 package Chess_pieces;
 
 import enums.color_piece;
-
+/**
+ * Class for Piece
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
+ */
 public class Piece {
     protected int x, y; // Position on board
     protected color_piece color = null; // Color of piece

@@ -9,6 +9,8 @@ import java.util.EnumMap;
 
 /**
  * Class for Field
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class Field implements Field_interface{
     private int row;

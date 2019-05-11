@@ -9,6 +9,8 @@ import enums.color_piece;
 
 /**
  * Class for Board
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class Board {
     private static final int BOARD_SIZE = 8;

@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Class for Game
+ * @author Michal Janů (xjanum03)
+ * @author Miroslav Švarc (xsvarc06)
  */
 public class Game {
     public Board board;
