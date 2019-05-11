@@ -1210,6 +1210,7 @@ public class Game {
      * @param all_moves moves in string form.
      */
     public void loadAllMoves(String all_moves){
+        this.loaded_moves =  new ArrayList<>();
         if (!all_moves.equals("")){
             String[] rotation_format = all_moves.split("\n");
             for (int i = 0; i < rotation_format.length ; i++){
