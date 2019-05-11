@@ -26,7 +26,7 @@ import Chess_common.*;
 
 
 public class Controller {
-    @FXML private GridPane chessBoardView;
+    @FXML public GridPane chessBoardView;
     @FXML private Pane main;
     private Board chessBoard = new Board();
     private Pane board[][] = new Pane[8][8];
@@ -48,7 +48,7 @@ public class Controller {
 
         int col = (int)(event.getX()/width*8);
         int row = (int)(event.getY()/height*8);
-        //System.out.println(row + " : " + col);
+        System.out.println(row + " : " + col);
 
 
     }
@@ -81,7 +81,6 @@ public class Controller {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(main.getScene().getWindow());
-        System.out.println(file);
         ArrayList<String> lines = new ArrayList<String>();
 
         try {
@@ -97,14 +96,6 @@ public class Controller {
         catch(Exception e){
 
         }
-
-        System.out.println(lines);
-
-
-        String all_moves = "1. Jc3 a5\n" +
-                "2. Jd5 J8f6\n" +
-                "3. Jxf6+ c7c6\n" +
-                "4. Dxa5 f7f5\n";
 
     }
 

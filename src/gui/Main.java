@@ -17,46 +17,57 @@ import Chess_common.*;
 
 
 public class Main extends Application {
-
+    Pane root;
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         //loader.setDefaultClassLoader(Thread.currentThread().getContextClassLoader());
         loader.setLocation(Main.class.getResource("sample.fxml"));
-        Parent root = loader.load();
-
+        root = loader.load();
+        Controller myController = loader.getController();
         primaryStage.setTitle("Chess");
         primaryStage.setScene(new Scene(root, 800, 700));
         primaryStage.show();
 
-        FXMLLoader loader1 = new FXMLLoader();
-        loader1.setLocation(Main.class.getResource("chessBoard.fxml"));
-        GridPane chessBoard = loader1.load();
-        chessBoard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        init(myController);
 
 
-        for (Node node : chessBoard.getChildren()) {
-            Integer x = GridPane.getRowIndex(node);
-            Integer y = GridPane.getColumnIndex(node);
-            int row = x == null ? 0 : x;
-            int col = y == null ? 0 : y;
-            if (node instanceof Pane) {
-                node.setId("pane" + row + "_" + col);
-            }
-            row = 8 - row - 1;
-            if ((row + col) % 2 == 1) {
-                node.setStyle("-fx-background-color: rgb(255,255,255);");
-            } else {
-                node.setStyle("-fx-background-color: rgb(128,128,128);");
-            }
-            if (row == 1) {
-                ImageView img = new ImageView(new Image(getClass().getResourceAsStream("../chess_figures_img/Pawn_B.png")));
+    }
+
+    public void init(Controller c){
+        try {
+           // FXMLLoader loader1 = new FXMLLoader();
+            //loader1.setLocation(Main.class.getResource("chessBoard.fxml"));
+            //GridPane chessBoard = loader1.load();
+            //chessBoard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+            for (Node node : c.chessBoardView.getChildren()) {
+                Integer x = GridPane.getRowIndex(node);
+                Integer y = GridPane.getColumnIndex(node);
+                int row = x == null ? 0 : x;
+                int col = y == null ? 0 : y;
                 if (node instanceof Pane) {
-                    ((Pane) node).getChildren().add(img);
+                    node.setId("pane" + row + "_" + col);
+                }
+                row = 8 - row - 1;
+                if ((row + col) % 2 == 1) {
+                    node.setStyle("-fx-background-color: rgb(255,255,255);");
+                } else {
+                    node.setStyle("-fx-background-color: rgb(128,128,128);");
+                }
+                if (row == 1) {
+                    ImageView img = new ImageView(new Image(getClass().getResourceAsStream("../chess_figures_img/Pawn_B.png")));
+                    if (node instanceof Pane) {
+                        img.setFitHeight(200);
+                        img.setFitWidth(200);
+                        ((Pane) node).getChildren().add(img);
+                    }
                 }
             }
         }
+        catch (Exception e){
 
+        }
     }
 
 
