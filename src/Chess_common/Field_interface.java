@@ -1,7 +1,13 @@
+/*!
+ * @authors Michal Janů (xjanum03), Miroslav Švarc (xsvarc06)
+ */
 package Chess_common;
 
 import Chess_pieces.Piece;
 
+/**
+ * Interface for class field
+ */
 public interface Field_interface {
     Piece getPiece();
     void setPiece(Piece piece);
@@ -13,8 +19,6 @@ public interface Field_interface {
 
     void setCol(int col);
     void setRow(int row);
-
-    void getCords();
 
     void addNextField(Field_interface.Direction direction, Field field);
     Field nextField(Field_interface.Direction direction);

@@ -11,6 +11,7 @@ import Chess_common.*;
 
 
 public class Controller {
+<<<<<<< HEAD
     @FXML private GridPane chessBoard;
     private Board board = new Board();
 
@@ -24,6 +25,10 @@ public class Controller {
     }
 
 
+=======
+    Tab tab = new Tab();
+
+>>>>>>> 920681553b98769f5d2658a6a06ed863e771135d
     @FXML protected void stopGame(ActionEvent event){
         // TODO
     }
@@ -43,6 +48,7 @@ public class Controller {
     @FXML protected void prew(ActionEvent event) { tab.prew(); }
 
     @FXML protected void restart(ActionEvent event){
+<<<<<<< HEAD
         tab.game = new Game();
         //Tab.game.newGame();
     }
@@ -57,6 +63,14 @@ public class Controller {
 
     @FXML protected void save(ActionEvent event){
         tab.
+=======
+        tab.newGame();
+        tab.start_auto();
+    }
+
+    @FXML protected void load(ActionEvent event){
+//        tab.loadAllMoves(value);
+>>>>>>> 920681553b98769f5d2658a6a06ed863e771135d
     }
 
     @FXML protected void gameType(ActionEvent event){

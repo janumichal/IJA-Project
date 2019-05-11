@@ -1,3 +1,7 @@
+/*!
+ * @authors Michal Janů (xjanum03), Miroslav Švarc (xsvarc06)
+ */
+
 package Chess_common;
 
 import Chess_pieces.*;
@@ -12,15 +16,25 @@ public class Board {
     private int black_points;
     public boolean game_end = false;
 
+    /**
+     * Check if is white on move.
+     * @return if white on move.
+     */
     public boolean is_white_on_move() {
         return this.white_on_move;
     }
 
+    /**
+     * Prints out the points
+     */
     public void printPoints(){
         System.out.println("White: " + getWhite_points() + " Black: " + getBlack_points());
     }
 
     // constructor creates array and fills it with pieces
+    /**
+     * Creates instance of board.
+     */
     public Board(){
         this.white_on_move = true;
         this.white_points = 0;
@@ -37,13 +51,24 @@ public class Board {
     }
 
     //################################################# FIELD WORK #####################################################
-
+    /**
+     * get field from 2D array on position [x][y]
+     * @param x Vertical position
+     * @param y Horizontal position
+     * @return field on position
+     */
     public Field getField(int x, int y){
         return this.board_array[x][y];
     }
 
     // ################################################# CORDINATES MOVE ###############################################
     // moves piece from position1 to position2
+    /**
+     * moves piece from to to and saves move to history
+     * @param from field from
+     * @param to field to
+     * @return history item
+     */
     public HistoryItem movePiece(Field from, Field to){
 
         Piece player = from.getPiece();
@@ -123,6 +148,11 @@ public class Board {
 
     // ############################################ PIECE MOVES ########################################################
     // BISHOP
+    /**
+     * moves Bishop from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void moveBishop(Field from, Field to){
         if (from.getCol() < to.getCol() && from.getRow() < to.getRow()){ // GO RIGHT DOWN
             moveInDir(Field_interface.Direction.RIGHT_DOWN, from, to);
@@ -136,6 +166,11 @@ public class Board {
     }
 
     //Queen
+    /**
+     * moves Queen from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void moveQueen(Field from, Field to){
         if (from.getCol() < to.getCol() && from.getRow() < to.getRow()){ // GO RIGHT DOWN
             moveInDir(Field_interface.Direction.RIGHT_DOWN, from, to);
@@ -157,11 +192,21 @@ public class Board {
     }
 
     //King
+    /**
+     * moves King from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void moveKing(Field from, Field to){
         move(from, to);
     }
 
     // ROOK
+    /**
+     * moves Rook from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void moveRook(Field from, Field to){
         if (from.getCol() < to.getCol()){ // GO RIGHT
             moveInDir(Field_interface.Direction.RIGHT, from, to);
@@ -174,6 +219,12 @@ public class Board {
         }
     }
 
+    /**
+     * moves piece in direction
+     * @param direction direction to go to
+     * @param from field from
+     * @param to field to
+     */
     private void moveInDir(Field_interface.Direction direction, Field from, Field to){
             Field pointer = from.nextField(direction);
             boolean free_path = true;
@@ -196,6 +247,11 @@ public class Board {
     }
 
     // PAWN
+    /**
+     * moves Pawn from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void movePawn(Field from, Field to){
         if (from.getPiece().getColor() == color_piece.WHITE){
             if (to.getPiece() == null){
@@ -229,10 +285,20 @@ public class Board {
     }
 
     // Knight
+    /**
+     * moves Knight from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void moveKnight(Field from, Field to){
         move(from, to);
     }
 
+    /**
+     * move from field from to field to
+     * @param from field from
+     * @param to field to
+     */
     private void move(Field from, Field to){
         if (!to.isEmpty()){
             if(from.getPiece().getColor() == to.getPiece().getColor()){
@@ -263,6 +329,13 @@ public class Board {
         }
     }
 
+    /**
+     * applayes history item and specified move
+     * @param from field from
+     * @param to field to
+     * @param target piece that has been taken (null if doesnt exist)
+     * @param exchange for what was exchenged (empty if not)
+     */
     public void moveHistory(Field from, Field to, Piece target, Piece exchange){
         Piece piece = to.removePiece();
         if (exchange == null){
@@ -279,6 +352,9 @@ public class Board {
 
     //############################################# CREATING BOARD #####################################################
     // show piece placement in text mode
+    /**
+     * Displays piece placement in console
+     */
     public void showPiecesText(){
         System.out.println("---------------------------------------------------------------------------------------------------------");
         for (int y = 0; y < BOARD_SIZE; y++){
@@ -311,11 +387,17 @@ public class Board {
     }
 
     // fill board with B/W pieces
+    /**
+     * fills board on starting point
+     */
     public void fillBoard(){
         placePieces(color_piece.BLACK);
         placePieces(color_piece.WHITE);
     }
 
+    /**
+     * cleans board of everything
+     */
     public void cleanBoard(){
         for (int x = 0; x < BOARD_SIZE; x++){
             for (int y = 0; y < BOARD_SIZE; y++){
@@ -325,6 +407,10 @@ public class Board {
     }
 
     // placement of pieces
+    /**
+     * places pieces of specified color
+     * @param color specified color
+     */
     private void placePieces(color_piece color){
         boolean is_black = color == color_piece.BLACK;
         int y = is_black ? 0 : BOARD_SIZE-1;
@@ -360,6 +446,9 @@ public class Board {
     }
 
     // fills array around in seperate field across whole board
+    /**
+     * fills enum map in field
+     */
     private void fillArrayAround(){
         for (int x = 0; x < BOARD_SIZE; x++){
             for (int y = 0; y < BOARD_SIZE; y++){
@@ -432,6 +521,12 @@ public class Board {
     }
 
     // is in array
+    /**
+     * checks if position is still in array
+     * @param x position x
+     * @param y position y
+     * @return if is inside array
+     */
     private boolean isInArray(int x, int y){
         if((x >= 0)&&(x <= BOARD_SIZE-1)){
             return((y >= 0)&&(y <= BOARD_SIZE-1));
@@ -439,10 +534,18 @@ public class Board {
         return false;
     }
 
+    /**
+     * get points of white player
+     * @return points
+     */
     public int getWhite_points() {
         return white_points;
     }
 
+    /**
+     * get points of black player
+     * @return points
+     */
     public int getBlack_points() {
         return black_points;
     }
