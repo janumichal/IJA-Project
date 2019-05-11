@@ -37,7 +37,8 @@ public class Main extends Application {
 
     public void init(Controller c){
         try {
-            drawBoard(c.chessBoardView);
+            Tab tab = new Tab();
+            drawBoard(c.chessBoardView, tab);
 
         }
         catch (Exception e){
@@ -50,7 +51,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void drawBoard(Pane pane){
+    public void drawBoard(Pane pane, Tab tab){
         for (Node node : pane.getChildren()) {
             int img_size = 50;
             Integer y = GridPane.getColumnIndex(node);
@@ -60,7 +61,6 @@ public class Main extends Application {
             if (node instanceof Pane) {
                 node.setId("pane" + row + "_" + col);
             }
-//                row = 8 - row - 1;
 
             if ((row + col) % 2 == 0) {
                 node.setStyle("-fx-background-color: rgb(255,255,255);");
@@ -69,10 +69,6 @@ public class Main extends Application {
             }
 
 
-            System.out.println("x = "+ x + "\ny = " + y +"\n");
-            System.out.println("col = "+ col + "\nrow = " + row +"\n");
-//                ###################################################################### NEW
-            Tab tab = new Tab();
 
             ImageView img;
 
