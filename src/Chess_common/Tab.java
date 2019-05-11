@@ -13,7 +13,7 @@ public class Tab {
                 "4. Dxa5 f7f5\n";
 
         loadAllMoves(all_moves);
-        newGame();
+       /* newGame();
         start_auto();
 
         next();
@@ -41,7 +41,7 @@ public class Tab {
 
         next();
         next();
-
+*/
 //        f1 = this.game.board.getField(5,2);
 //        f2 = this.game.board.getField(4,0);
 //        move(f1, f2);
