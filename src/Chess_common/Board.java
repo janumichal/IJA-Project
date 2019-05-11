@@ -7,6 +7,9 @@ package Chess_common;
 import Chess_pieces.*;
 import enums.color_piece;
 
+/**
+ * Class for Board
+ */
 public class Board {
     private static final int BOARD_SIZE = 8;
     private Field[][] board_array;

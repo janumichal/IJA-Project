@@ -5,6 +5,9 @@ package Chess_common;
 
 import enums.color_piece;
 
+/**
+ * Class for Move
+ */
 public class Move {
     private Field from;
     private Field to;
@@ -305,7 +308,7 @@ public class Move {
 
     /**
      * Setter for row in move in character form.
-     * @param column Row on board.
+     * @param row Row on board.
      */
     public void setRow(char row) {
         this.row = 8 - ((int)row - 48);
@@ -313,7 +316,7 @@ public class Move {
 
     /**
      * Setter for row in move in numeric form.
-     * @param column Row on board.
+     * @param row Row on board.
      */
     public void setRow(int row) {
         this.row = row;
