@@ -6,6 +6,9 @@ package Chess_common;
 import Chess_pieces.Pawn;
 import Chess_pieces.Piece;
 
+/**
+ * Class for History Item
+ */
 public class HistoryItem {
     private Field from;
     private Field to;
@@ -14,6 +17,9 @@ public class HistoryItem {
 
     /**
      * Created instance of Item in History.
+     * @param from from to move to
+     * @param to where to mov to
+     * @param target_to piece on TO field
      */
     public HistoryItem(Field from, Field to, Piece target_to) {
         this.from = from;

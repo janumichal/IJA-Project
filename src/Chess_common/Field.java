@@ -7,6 +7,9 @@ import Chess_pieces.Piece;
 
 import java.util.EnumMap;
 
+/**
+ * Class for Field
+ */
 public class Field implements Field_interface{
     private int row;
     private int col;
@@ -53,7 +56,7 @@ public class Field implements Field_interface{
 
     /**
      * Setter for row.
-     * @param col Row that is being set.
+     * @param row Row that is being set.
      */
     public void setRow(int row){
         this.row = row;
@@ -117,7 +120,7 @@ public class Field implements Field_interface{
     }
 
     /**
-     * @brief Removes Piece from field.
+     * Removes Piece from field.
      * @return Pointer on piece that has been removed from field.
      */
     public Piece removePiece() {

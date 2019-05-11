@@ -5,6 +5,9 @@ package Chess_common;
 
 import enums.color_piece;
 
+/**
+ * Class for Tab
+ */
 public class Tab {
     public static Game game;
 

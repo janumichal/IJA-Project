@@ -6,6 +6,9 @@ package Chess_common;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for History
+ */
 public class History {
     private List<HistoryItem> array;
     private int pointer;

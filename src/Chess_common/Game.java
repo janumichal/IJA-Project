@@ -12,6 +12,9 @@ import javax.xml.ws.WebServiceClient;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for Game
+ */
 public class Game {
     public Board board;
     private History history;
@@ -372,6 +375,7 @@ public class Game {
     /**
      * Check valid moves for Bishop.
      * @param move move with coordinates.
+     * @return if move is valid for this piece
      */
     public boolean bishopCheck(Move move){
         Field to = move.getTo();
@@ -400,7 +404,7 @@ public class Game {
      * @param move move with coords.
      * @param to Field to move to.
      * @param piece Piece that is being moved.
-     * @return
+     * @return if move is valid
      */
     public boolean bishopAll(Move move, Field to, String piece){
         Field left_up = to.nextField(Field_interface.Direction.LEFT_UP);
@@ -469,6 +473,7 @@ public class Game {
     /**
      * Check valid moves for Rook.
      * @param move move with coordinates.
+     * @return if move is valid.
      */
     public boolean rookCheck(Move move){
         Field to  = move.getTo();
@@ -500,7 +505,7 @@ public class Game {
      * @param move move with coords.
      * @param to Field to move to.
      * @param piece Piece that is being moved.
-     * @return
+     * @return id move is valid
      */
     public boolean rookCheckAll(Move move,Field to, String piece){
         Field up = to.nextField(Field_interface.Direction.UP);
@@ -669,7 +674,7 @@ public class Game {
 
     /**
      * Check valid moves for Knight.
-     * @param move move with coordinates.
+     * @param one_move move with coordinates.
      */
     public void knightCheck(Move one_move){
         Field to = one_move.getTo();
@@ -820,8 +825,8 @@ public class Game {
 
     /**
      * applyes move that is in simplified format
-     * @param one_move
-     * @param to
+     * @param one_move move containing all coordinates
+     * @param to where to move to
      */
     public void knightCheckAllmoves(Move one_move, Field to){
         Field from;
@@ -887,7 +892,7 @@ public class Game {
 
     /**
      * Check valid moves for King.
-     * @param move move with coordinates.
+     * @param one_move move with coordinates.
      */
     public void kingCheck(Move one_move){
         Field to = one_move.getTo();
@@ -912,7 +917,8 @@ public class Game {
 
     /**
      * Check valid moves for Pawn.
-     * @param move move with coordinates.
+     * @param dir whitch direction pice moves in
+     * @param one_move move with coordinates.
      */
     public void pawnCheck(Field_interface.Direction dir, Move one_move){
         Field to = one_move.getTo();

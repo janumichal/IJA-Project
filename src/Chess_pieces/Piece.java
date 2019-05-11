@@ -13,7 +13,6 @@ public class Piece {
      * @param y Horizontal location of piece.
      * @param value_of_piece Value of specific piece.
      * @param color Color of piece.
-     * @param name Name of piece.
      */
     public Piece(int x, int y, int value_of_piece, color_piece color){
         this.x = x;
@@ -40,6 +39,7 @@ public class Piece {
 
     /**
      * Setter for column.
+     * @param x number of column
      */
     public void setCol(int x) {
         this.x = x;
@@ -47,6 +47,7 @@ public class Piece {
 
     /**
      * Setter for row.
+     * @param y number of row
      */
     public void setRow(int y) {
         this.y = y;
