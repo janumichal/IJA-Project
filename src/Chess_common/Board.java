@@ -6,6 +6,7 @@ package Chess_common;
 
 import Chess_pieces.*;
 import enums.color_piece;
+import javafx.scene.control.Alert;
 
 /**
  * Class for Board
@@ -82,13 +83,21 @@ public class Board {
             if (is_white_on_move()){
                 if (player.getColor() == color_piece.BLACK){
                     System.out.println("WHITE IS ON MOVE");
-                    // TODO WINDOW POPUP
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("WHITE IS ON MOVE");
+                    alert.showAndWait();
                     return null;
                 }
             }else {
                 if (player.getColor()== color_piece.WHITE){
                     System.out.println("BLACK IS ON MOVE");
-                    // TODO WINDOW POPUP
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("BLACK IS ON MOVE");
+                    alert.showAndWait();
                     return null;
                 }
             }
@@ -100,7 +109,11 @@ public class Board {
                 movePawn(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("IS NOT VALID MOVE");
+                alert.showAndWait();
                 return null;
             }
         }else if(player instanceof Rook){ // MOVE ROOK
@@ -108,7 +121,11 @@ public class Board {
                 moveRook(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("IS NOT VALID MOVE");
+                alert.showAndWait();
                 return null;
             }
         }else if (player instanceof Knight){ // MOVE KNIGHT
@@ -116,7 +133,11 @@ public class Board {
                 moveKnight(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("IS NOT VALID MOVE");
+                alert.showAndWait();
                 return null;
             }
         }else if(player instanceof Bishop){ // MOVE BISHOP
@@ -124,7 +145,11 @@ public class Board {
                 moveBishop(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("IS NOT VALID MOVE");
+                alert.showAndWait();
                 return null;
             }
         }else if(player instanceof King){
@@ -132,7 +157,11 @@ public class Board {
                 moveKing(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("IS NOT VALID MOVE");
+                alert.showAndWait();
                 return null;
             }
         }else if(player instanceof Queen){
@@ -140,12 +169,20 @@ public class Board {
                 moveQueen(from, to);
             }else {
                 System.out.println("IS NOT VALID MOVE");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("IS NOT VALID MOVE");
+                alert.showAndWait();
                 return null;
             }
         }else{
             System.out.println("NO movable piece avalible");
-            // TODO WINDOW POPUP
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("NO movable piece avalible");
+            alert.showAndWait();
             return null;
         }
         return this.historyItem;
@@ -308,7 +345,11 @@ public class Board {
         if (!to.isEmpty()){
             if(from.getPiece().getColor() == to.getPiece().getColor()){
                 System.out.println("CANT ATTACK SAME COLOR");
-                // TODO WINDOW POPUP
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("CANT ATTACK SAME COLOR");
+                alert.showAndWait();
             }else{
                 Piece piece_to;
                 Piece piece_from = from.removePiece();
@@ -322,7 +363,12 @@ public class Board {
                 this.historyItem = new HistoryItem(from, to, piece_to);
                 this.white_on_move = !this.white_on_move;
                 if(piece_to instanceof King){
-                    System.out.println("GAME ENDS KING TAKEN"); // TODO POPUP
+                    System.out.println("GAME ENDS KING TAKEN");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("GAME ENDS KING TAKEN");
+                    alert.showAndWait();
                     this.game_end = true;
                 }
             }

@@ -5,6 +5,8 @@ package Chess_common;
 
 import Chess_pieces.*;
 import enums.color_piece;
+import javafx.scene.control.Alert;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,27 +122,52 @@ public class Game {
         if (one_move.isMat()){
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
             if(!isMat(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS NOT MAT!!!"); // TODO POPOUT
+                System.out.println("WRONG FORMAT IS NOT MAT!!!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("WRONG FORMAT IS MAT!!!");
+                alert.showAndWait();
                 undo();
                 return false;
             }
-            System.out.println("IS MAT !!!"); // TODO POPOUT end game
+            System.out.println("IS MAT !!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("IS MAT!!!");
+            alert.showAndWait();
         } else if(one_move.isCheck()){
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
             if(!isCheck(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS NOT CHECK!!!"); // TODO POPOUT
+                System.out.println("WRONG FORMAT IS NOT CHECK!!!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("WRONG FORMAT IS CHECK!!!");
+                alert.showAndWait();
                 undo();
                 return false;
             }
         } else {
             Field king_field = findKing(one_move.getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
             if(isMat(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS MAT!!!"); // TODO POPOUT
+                System.out.println("WRONG FORMAT IS MAT!!!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("WRONG FORMAT IS MAT!!!");
+                alert.showAndWait();
                 undo();
                 return false;
             }
             if(isCheck(king_field, king_field.getPiece().getColor())){
-                System.out.println("WRONG FORMAT IS CHECK!!!"); // TODO POPOUT
+                System.out.println("WRONG FORMAT IS CHECK!!!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("WRONG FORMAT IS CHECK!!!");
+                alert.showAndWait();
                 undo();
                 return false;
             }
@@ -178,19 +205,32 @@ public class Game {
                             if (from.getPiece().getColor() == color_piece.WHITE){
                                 exchange(one_move);
                             }else {
-                                // TODO POPUP
                                 System.out.println("MOVE WITH WRONG COLOR");
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText(null);
+                                alert.setContentText("MOVE WITH WRONG COLOR");
+                                alert.showAndWait();
                             }
                         }else {
                             if (from.getPiece().getColor() == color_piece.BLACK){
                                 exchange(one_move);
                             }else {
-                                // TODO POPUP
                                 System.out.println("MOVE WITH WRONG COLOR");
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText(null);
+                                alert.setContentText("MOVE WITH WRONG COLOR");
+                                alert.showAndWait();
                             }
                         }
                     }else {
                         System.out.println("WRONGLY FORMATED MOVE WRONG PLACE");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("WRONGLY FORMATED MOVE WRONG PLACE");
+                        alert.showAndWait();
                     }
                 }
             }else if (one_move.isKnight() && from.getPiece() instanceof Knight) {
@@ -367,7 +407,12 @@ public class Game {
                 }
             }
         }
-        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        System.out.println("WRONG MOVE !!!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("WRONG MOVE !!!");
+        alert.showAndWait();
     }
 
     /**
@@ -393,7 +438,12 @@ public class Game {
                 }
             }
         }
-        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        System.out.println("WRONG MOVE !!!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("WRONG MOVE !!!");
+        alert.showAndWait();
         return false;
     }
 
@@ -494,7 +544,12 @@ public class Game {
 
             }
         }
-        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        System.out.println("WRONG MOVE !!!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("WRONG MOVE !!!");
+        alert.showAndWait();
         return false;
     }
 
@@ -685,7 +740,12 @@ public class Game {
                 knightCheckRow(one_move, to);
             }
         }else {
-            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+            System.out.println("WRONG MOVE !!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("WRONG MOVE !!!");
+            alert.showAndWait();
         }
     }
 
@@ -702,7 +762,12 @@ public class Game {
                 knightCheckRowN(to, move, Field_interface.Direction.DOWN);
             }
         }else {
-            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+            System.out.println("WRONG MOVE !!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("WRONG MOVE !!!");
+            alert.showAndWait();
         }
     }
 
@@ -752,7 +817,12 @@ public class Game {
                 }
             }
         }
-        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        System.out.println("WRONG MOVE !!!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("WRONG MOVE !!!");
+        alert.showAndWait();
     }
 
     /**
@@ -768,7 +838,12 @@ public class Game {
                 knightCheckColumnN(to, move, Field_interface.Direction.RIGHT);
             }
         }else {
-            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+            System.out.println("WRONG MOVE !!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("WRONG MOVE !!!");
+            alert.showAndWait();
         }
     }
 
@@ -818,7 +893,12 @@ public class Game {
                 }
             }
         }
-        System.out.println("WRONG MOVE !!!"); // TODO POPUP
+        System.out.println("WRONG MOVE !!!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("WRONG MOVE !!!");
+        alert.showAndWait();
     }
 
     /**
@@ -909,7 +989,12 @@ public class Game {
             }
         }
         if (one_move.getFrom() == null){
-            System.out.println("WRONG MOVE !!!"); // TODO POPUP
+            System.out.println("WRONG MOVE !!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("WRONG MOVE !!!");
+            alert.showAndWait();
         }
     }
 
@@ -928,6 +1013,11 @@ public class Game {
             pieceCheckMove(tmp, one_move);
         }else {
             System.out.println("WRONG MOVE !!!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("WRONG MOVE !!!");
+            alert.showAndWait();
         }
     }
 
@@ -946,20 +1036,35 @@ public class Game {
             }else if ((tmp = to.nextField(dir2)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
                 pieceCheckMove(tmp, one_move);
             }else {
-                System.out.println("WRONG MOVE !!!"); // TODO POPUP
+                System.out.println("WRONG MOVE !!!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("WRONG MOVE !!!");
+                alert.showAndWait();
             }
         }else {
             if (one_move.getColumn() < one_move.getTo().getCol()){
                 if ((tmp = to.nextField(dir1)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
                     pieceCheckMove(tmp, one_move);
                 }else{
-                    System.out.println("WRONG MOVE !!!"); // TODO POPUP
+                    System.out.println("WRONG MOVE !!!");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("WRONG MOVE !!!");
+                    alert.showAndWait();
                 }
             }else if (one_move.getColumn() > one_move.getTo().getCol()){
                 if ((tmp = to.nextField(dir2)) != null && tmp.getPiece() != null && tmp.getPiece() instanceof Pawn){
                     pieceCheckMove(tmp, one_move);
                 }else{
-                    System.out.println("WRONG MOVE !!!"); // TODO POPUP
+                    System.out.println("WRONG MOVE !!!");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("WRONG MOVE !!!");
+                    alert.showAndWait();
                 }
             }
         }
@@ -1047,7 +1152,7 @@ public class Game {
                 Field king_field = findKing(to.getPiece().getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
                 if (isCheck(king_field, king_field.getPiece().getColor())){
                     new_move.setCheck();
-                }else if(isMat(king_field, king_field.getPiece().getColor())){ //TODO NON_WORKING do later
+                }else if(isMat(king_field, king_field.getPiece().getColor())){
                     new_move.setMat();
                 }
             }
@@ -1055,7 +1160,6 @@ public class Game {
             return new_move;
         }
 
-        //TODO CHACK AND MAT
         return null;
     }
 
@@ -1112,7 +1216,11 @@ public class Game {
                 String[] splited = rotation_format[i].split("\\.");
                 if (i+1 != Integer.valueOf(splited[0].trim())){
                     System.out.println("Order is INVALID"+ splited[0]);
-                    // TODO WINDOW POPUP
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Order is INVALID"+ splited[0]);
+                    alert.showAndWait();
                     break;
                 }else {
                     String[] arr_cord = splited[1].trim().split(" ");
