@@ -9,3 +9,4 @@ production/
 .idea/uiDesigner.xml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/ant.xml
+.idea/compiler.xml

@@ -50,7 +50,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    void drawBoard(Pane pane){
+    public void drawBoard(Pane pane){
         for (Node node : pane.getChildren()) {
             int img_size = 50;
             Integer y = GridPane.getColumnIndex(node);
