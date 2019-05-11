@@ -5,10 +5,6 @@ package Chess_common;
 
 import Chess_pieces.*;
 import enums.color_piece;
-import sun.security.jca.GetInstance;
-import sun.text.resources.en.FormatData_en_IE;
-
-import javax.xml.ws.WebServiceClient;
 import java.util.ArrayList;
 import java.util.List;
 

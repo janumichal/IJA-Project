@@ -4,6 +4,8 @@
 .idea/vcs.xml
 .idea/workspace.xml
 ija_project.iml
-*.xml
 *.class
 production/
+.idea/uiDesigner.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/ant.xml

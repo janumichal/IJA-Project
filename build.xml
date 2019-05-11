@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="IJA_Project" default="dist" basedir=".">
+
+    <target name="compile" depends="clean" description="compile the source">
+        <javac includeantruntime="false" srcdir="src" destdir="build"/>
+        <jar jarfile="dest/chess.jar" basedir="build">
+            <manifest>
+                <attribute name="Main-Class" value="gui.Main"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="compile" description="generate the distribution">
+        <java jar="dest/chess.jar" fork="true"/>
+    </target>
+
+    <target name="clean" description="cleans dirs">
+        <delete includeemptydirs="true">
+            <fileset dir="build" includes="**/*"/>
+        </delete>
+        <delete includeemptydirs="true">
+            <fileset dir="dest" includes="**/*"/>
+        </delete>
+    </target>
+</project>

@@ -11,7 +11,7 @@ import enums.color_piece;
  * @author Miroslav Švarc (xsvarc06)
  */
 public class Tab {
-    public static Game game;
+    public Game game;
 
     /**
      * Creates instance of Tab.
