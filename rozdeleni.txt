@@ -1,2 +1,2 @@
-xjanum03: 50
-xsvarc06: 50
+xjanum03: 65
+xsvarc06: 35

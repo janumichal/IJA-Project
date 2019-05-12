@@ -161,6 +161,8 @@ public class Tab {
      * Creates new game.
      */
     public void newGame(){
+        this.game.setIndex(0);
+        this.game.board.white_on_move = true;
         this.game.board.cleanBoard();
         this.game.board.fillBoard();
     }
