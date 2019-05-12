@@ -51,9 +51,7 @@ public class Controller {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             speed = newValue.intValue();
         });
-
         body.setText("Body: " + tab.game.board.printPoints());
-
     }
 
     /**
@@ -302,7 +300,7 @@ public class Controller {
      * @param tab actual tab
      */
     public void drawBoard(Pane pane, Tab tab){
-
+        body.setText("Body: " + tab.game.board.printPoints());
         for (Node node : pane.getChildren()) {
             try {
                 ((Pane)node).getChildren().clear();
