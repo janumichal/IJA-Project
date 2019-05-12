@@ -39,7 +39,6 @@ public class Controller {
     private int speed = 1;
     private int moveCount;
     private Pane board[][] = new Pane[8][8];
-    Timer timer = new Timer();
 
     private Tab tab = new Tab();
 
@@ -131,11 +130,13 @@ public class Controller {
 
     }
 int count = 0;
+    Timer timer;
     /**
      * start the game and timer
      * @param event event listener
      */
     @FXML protected void start(ActionEvent event){
+        timer = new Timer();
 
         timer.schedule(new TimerTask() {
             public void run() {
