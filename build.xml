@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="IJA_Project" default="dist" basedir=".">
+<project name="IJA_Project" default="run" basedir=".">
 
+    <!--COMPILES-->
     <target name="compile" depends="clean" description="compile the source">
+        <!--COMPILE-->
         <javac includeantruntime="false" srcdir="src" destdir="build"/>
+
+        <!--COPY IMGS-->
+        <mkdir dir="build\chess_figures_img"/>
+        <copy todir="build\chess_figures_img" >
+            <fileset dir="src\chess_figures_img" includes="**"/>
+        </copy>
+
+        <!--COPY FX STYLES-->
+        <copy todir="build\gui" >
+            <fileset dir="src\gui" includes="*.fxml *.css"/>
+        </copy>
+
+        <!--ZIP TO JAR-->
         <jar jarfile="dest/chess.jar" basedir="build">
             <manifest>
                 <attribute name="Main-Class" value="gui.Main"/>
@@ -10,10 +25,13 @@
         </jar>
     </target>
 
+    <!--RUNS-->
     <target name="run" depends="compile" description="generate the distribution">
         <java jar="dest/chess.jar" fork="true"/>
     </target>
 
+
+    <!--CLEANS-->
     <target name="clean" description="cleans dirs">
         <delete includeemptydirs="true">
             <fileset dir="build" includes="**/*"/>
