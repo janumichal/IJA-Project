@@ -1228,6 +1228,11 @@ public class Game {
                     int move_length = arr_cord.length;
                     if (move_length > 2 || move_length < 1){
                         System.out.println("INVALID NUMBER OF MOVES");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("INVALID NUMBER OF MOVES");
+                        alert.showAndWait();
                         break;
                     }else {
                         String white = arr_cord[0];
@@ -1245,12 +1250,21 @@ public class Game {
                                     this.loaded_moves.add(b_move);
                                 }else {
                                     System.out.println("FORMAT NOT VALID");
+                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Information");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("FORMAT NOT VALID");
+                                    alert.showAndWait();
                                     break;
                                 }
                             }
                         }else{
-                            System.out.println("err");
                             System.out.println("FORMAT NOT VALID");
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Information");
+                            alert.setHeaderText(null);
+                            alert.setContentText("FORMAT NOT VALID");
+                            alert.showAndWait();
                             break;
                         }
                     }

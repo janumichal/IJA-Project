@@ -40,7 +40,7 @@ public class Controller {
     private Field to;
     private Pane board[][] = new Pane[8][8];
 
-
+    
     private Tab tab = new Tab();
 
     @FXML ListView<String> listView;
@@ -89,6 +89,7 @@ public class Controller {
             }
 
             drawBoard(chessBoardView,tab);
+            loadListFromMove();
         }
 
 
@@ -125,19 +126,29 @@ public class Controller {
         ArrayList<String> lines = new ArrayList<String>();
 
         try {
+            StringBuilder str_b = new StringBuilder();
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             while ((line = br.readLine()) != null) {
-                lines.add(line);
-                listView.getItems().add(line);
+                str_b.append(line);
+                str_b.append("\n");
             }
-
             br.close();
+            tab.game.loadAllMoves(str_b.toString());
+            loadListFromMove();
         }
         catch(Exception e){
 
         }
 
+    }
+
+    public void loadListFromMove(){
+        listView.getItems().clear();
+        String[] radky = tab.game.printAllMoves().split("\n");
+        for (String one_line: radky){
+            listView.getItems().add(one_line);
+        }
     }
 
     @FXML protected void save(ActionEvent event){
