@@ -34,25 +34,25 @@ import Chess_common.*;
 public class Controller {
     @FXML public GridPane chessBoardView;
     @FXML private Pane main;
-    private Field[][] board_array;
-    Piece currentPiece;
-    Boolean click = false;
-    private Board chessBoard = new Board();
+    private Piece currentPiece;
+    private Boolean click = false;
+    private Field from;
+    private Field to;
     private Pane board[][] = new Pane[8][8];
-    Field from;
-    Field to;
 
 
-    Tab tab = new Tab();
+    private Tab tab = new Tab();
+
     @FXML ListView<String> listView;
 
     @FXML protected void onMouseClick(MouseEvent event){
-//        for(Node node : chessBoardView.getChildren()){
-//            if (node instanceof Pane){
-//                Pane pane = (Pane) node;
-//                board[Character.getNumericValue(pane.getId().charAt(4))][Character.getNumericValue(pane.getId().charAt(6))] = pane;
-//            }
-//        }
+
+        for (Node node : chessBoardView.getChildren()) {
+            if (node instanceof Pane){
+                Pane pane = (Pane)node;
+                board[Character.getNumericValue(pane.getId().charAt(4))][Character.getNumericValue(pane.getId().charAt(6))] = pane;
+            }
+        }
 
         double width = chessBoardView.getWidth();
         double height = chessBoardView.getHeight();
@@ -61,14 +61,12 @@ public class Controller {
             int row = (int) (event.getY() / height * 8);
             click = true;
             System.out.println("From " + row + " : " + col);
-//            tab.game.board.showPiecesText();
             from = tab.game.board.getField(col,row);
             currentPiece = from.getPiece();
             System.out.println(currentPiece instanceof Pawn ? "ano" : "ne");
             if (currentPiece == null) return;
 
-//            from.setRow(row);
-//            from.setCol(col);
+
 
         }
         else if (click){
@@ -79,6 +77,17 @@ public class Controller {
 
             to = tab.game.board.getField(col2,row2);
             tab.move(from, to);
+            Pane oldPane = board[currentPiece.getRow()][currentPiece.getCol()];
+            Image image = null;
+
+            for (Node view : oldPane.getChildren()) {
+                if (view instanceof ImageView) {
+                    image = ((ImageView) view).getImage();
+                    ((ImageView) view).setImage(null);
+                }
+
+            }
+
             drawBoard(chessBoardView,tab);
         }
 
