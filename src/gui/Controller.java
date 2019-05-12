@@ -10,7 +10,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
+
+import java.util.Set;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
@@ -21,19 +25,24 @@ import javafx.collections.FXCollections;
 
 import javafx.stage.Stage;
 
-
+import Chess_pieces.Piece;
 import Chess_common.*;
 
 
 public class Controller {
     @FXML public GridPane chessBoardView;
     @FXML private Pane main;
+    private Field[][] board_array;
+    Piece currentPiece;
+    Boolean click = false;
     private Board chessBoard = new Board();
     private Pane board[][] = new Pane[8][8];
+    Field from = new Field(0,0);
+    Field to = new Field(0,0);
+
 
     Tab tab = new Tab();
     @FXML ListView<String> listView;
-    @FXML TextArea text; // TODO TextField?
 
     @FXML protected void onMouseClick(MouseEvent event){
         for(Node node : chessBoardView.getChildren()){
@@ -45,10 +54,31 @@ public class Controller {
 
         double width = chessBoardView.getWidth();
         double height = chessBoardView.getHeight();
+        if (!click) {
+            int col = (int) (event.getX() / width * 8);
+            int row = (int) (event.getY() / height * 8);
+            click = true;
+            System.out.println("From " + row + " : " + col);
 
-        int col = (int)(event.getX()/width*8);
-        int row = (int)(event.getY()/height*8);
-        System.out.println(row + " : " + col);
+            currentPiece = tab.game.board.getField(row, col).getPiece();
+            if (currentPiece == null) return;
+
+            from.setRow(row);
+            from.setCol(col);
+            System.out.println(from.getPiece());
+        }
+        else if (click){
+            int col2 = (int) (event.getX() / width * 8);
+            int row2 = (int) (event.getY() / height * 8);
+            System.out.println("To " + row2 + " : " + col2);
+            click = false;
+
+            to.setRow(row2);
+            to.setCol(col2);
+        }
+
+
+       tab.move(from, to);
 
 
     }
@@ -74,7 +104,7 @@ public class Controller {
     @FXML protected void prew(ActionEvent event) { tab.prew(); }
 
     @FXML protected void restart(ActionEvent event){
-        tab.game = new Game();
+        tab.newGame();
     }
 
     @FXML protected void load(ActionEvent event){

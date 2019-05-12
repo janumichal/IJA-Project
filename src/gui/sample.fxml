@@ -191,14 +191,14 @@
       <Button layoutX="280.0" layoutY="489.0" mnemonicParsing="false" onAction="#undo" prefHeight="25.0" prefWidth="61.0" text="Undo" />
       <Button layoutX="362.0" layoutY="489.0" mnemonicParsing="false" onAction="#redo" prefHeight="25.0" prefWidth="61.0" text="Redo" />
       <ListView fx:id="listView" layoutX="461.0" layoutY="64.0" prefHeight="404.0" prefWidth="249.0" />
-      <TextArea fx:id="text" layoutX="461.0" layoutY="504.0" prefHeight="181.0" prefWidth="249.0" />
       <MenuBar prefHeight="25.0" prefWidth="800.0">
         <menus>
           <Menu mnemonicParsing="false" style="width: 50;" text="Game">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Load" onAction="#load"/>
-                  <MenuItem mnemonicParsing="false" text="Save" />
-              <MenuItem mnemonicParsing="false" text="Close" />
+               <MenuItem mnemonicParsing="false" text="Load" onAction="#load"/>
+               <MenuItem mnemonicParsing="false" text="Save" />
+               <MenuItem mnemonicParsing="false" text="Restart" onAction="#restart"/>
+               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

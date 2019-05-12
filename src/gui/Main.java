@@ -1,5 +1,7 @@
 package gui;
 
+import Chess_pieces.*;
+import enums.color_piece;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -30,132 +32,14 @@ public class Main extends Application {
         primaryStage.show();
 
         init(myController);
-        
+
     }
 
     public void init(Controller c){
         try {
+            Tab tab = new Tab();
+            drawBoard(c.chessBoardView, tab);
 
-            for (Node node : c.chessBoardView.getChildren()) {
-                int img_size = 50;
-                Integer x = GridPane.getRowIndex(node);
-                Integer y = GridPane.getColumnIndex(node);
-                int row = x == null ? 0 : x;
-                int col = y == null ? 0 : y;
-                if (node instanceof Pane) {
-                    node.setId("pane" + row + "_" + col);
-                }
-                row = 8 - row - 1;
-                if ((row + col) % 2 == 1) {
-                    node.setStyle("-fx-background-color: rgb(255,255,255);");
-                } else {
-                    node.setStyle("-fx-background-color: rgb(128,128,128);");
-                }
-                if (row == 1) {
-                    ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Pawn_B.png")));
-                    if (node instanceof Pane) {
-                        img.setFitHeight(img_size);
-                        img.setFitWidth(img_size);
-                        ((Pane) node).getChildren().add(img);
-                    }
-                }
-                else if(row == 6) {
-                    ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Pawn_W.png")));
-                    if (node instanceof Pane){
-                        img.setFitHeight(img_size);
-                        img.setFitWidth(img_size);
-                        ((Pane)node).getChildren().add(img);
-                    }
-                }
-                else if (row == 0) {
-                    if (col == 0 || col== 7) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Rook_B.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    } else if (col == 1 || col == 6) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Knight_B.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    } else if (col == 2 || col == 5) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_B.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                    else if (col == 4) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/King_B.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                    else if (col == 3) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Queen_B.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-
-                } else if (row == 7) {
-                    if (col == 0 || col== 7) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Rook_W.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    } else if (col == 1 || col == 6) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Knight_W.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    } else if (col == 2 || col == 5) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_W.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                    else if (col == 4) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/King_W.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                    else if (col == 3) {
-                        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Queen_W.png")));
-                        if (node instanceof Pane){
-                            img.setFitHeight(img_size);
-                            img.setFitWidth(img_size);
-                            ((Pane)node).getChildren().add(img);
-                        }
-                    }
-                }
-                else {
-                    ImageView img = new ImageView();
-                    if (node instanceof Pane){
-                        img.setFitHeight(img_size);
-                        img.setFitWidth(img_size);
-                        ((Pane)node).getChildren().add(img);
-                    }
-                }
-            }
         }
         catch (Exception e){
 
@@ -165,5 +49,75 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void drawBoard(Pane pane, Tab tab){
+        for (Node node : pane.getChildren()) {
+            int img_size = 50;
+            Integer y = GridPane.getColumnIndex(node);
+            Integer x = GridPane.getRowIndex(node);
+            int row = y == null ? 0 : y;
+            int col = x == null ? 0 : x;
+            if (node instanceof Pane) {
+                node.setId("pane" + row + "_" + col);
+            }
+
+            if ((row + col) % 2 == 0) {
+                node.setStyle("-fx-background-color: rgb(255,255,255);");
+            } else {
+                node.setStyle("-fx-background-color: rgb(128,128,128);");
+            }
+
+
+
+            ImageView img;
+
+            Piece piece = tab.game.board.getField(row, col).getPiece();
+            if(piece instanceof Rook){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Rook_W.png")));
+                }else{
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Rook_B.png")));
+                }
+            }else if(piece instanceof Knight){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Knight_W.png")));
+                }else{
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Knight_B.png")));
+                }
+            }else if(piece instanceof Bishop){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_W.png")));
+                }else{
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_B.png")));
+                }
+            }else if(piece instanceof King){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/King_W.png")));
+                }else{
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/King_B.png")));
+                }
+            }else if(piece instanceof Queen){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Queen_W.png")));
+                }else{
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Queen_B.png")));
+                }
+            }else if(piece instanceof Pawn){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Pawn_W.png")));
+                }else{
+                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Pawn_B.png")));
+                }
+            }else{
+                img = new ImageView();
+            }
+
+            if (node instanceof Pane){
+                img.setFitHeight(img_size);
+                img.setFitWidth(img_size);
+                ((Pane)node).getChildren().add(img);
+            }
+        }
     }
 }
