@@ -40,7 +40,7 @@ public class Controller {
     private Field to;
     private Pane board[][] = new Pane[8][8];
 
-    
+
     private Tab tab = new Tab();
 
     @FXML ListView<String> listView;
@@ -103,20 +103,32 @@ public class Controller {
 
     @FXML protected void undo(ActionEvent event){
         tab.undo();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
     }
 
     @FXML protected void redo(ActionEvent event){
         tab.redo();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
     }
 
     @FXML protected void next(ActionEvent event){
         tab.next();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
     }
 
-    @FXML protected void prew(ActionEvent event) { tab.prew(); }
+    @FXML protected void prew(ActionEvent event) {
+        tab.prew();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
+    }
 
     @FXML protected void restart(ActionEvent event){
         tab.newGame();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
     }
 
     @FXML protected void load(ActionEvent event){
@@ -161,7 +173,14 @@ public class Controller {
     }
 
         public void drawBoard(Pane pane, Tab tab){
+
             for (Node node : pane.getChildren()) {
+                try {
+                    ((Pane)node).getChildren().clear();
+                }catch (Exception e){
+
+                }
+
                 int img_size = 50;
                 Integer y = GridPane.getColumnIndex(node);
                 Integer x = GridPane.getRowIndex(node);
