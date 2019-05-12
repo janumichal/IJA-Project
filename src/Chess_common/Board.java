@@ -17,7 +17,7 @@ public class Board {
     private static final int BOARD_SIZE = 8;
     private Field[][] board_array;
     private HistoryItem historyItem;
-    private boolean white_on_move;
+    public boolean white_on_move;
     private int white_points;
     private int black_points;
     public boolean game_end = false;
@@ -399,6 +399,7 @@ public class Board {
             }
         }
         to.putPiece(target);
+        this.white_on_move = !this.white_on_move;
     }
 
     //############################################# CREATING BOARD #####################################################

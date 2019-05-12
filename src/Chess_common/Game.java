@@ -63,8 +63,10 @@ public class Game {
      * Prewious move.
      */
     public void prew(){
-        undo();
-        this.index--;
+        if(this.index < 1){
+        }else{
+            undo();
+        }
     }
 
     /**
@@ -1149,12 +1151,15 @@ public class Game {
         if (item != null){
             this.history.add(item);
             if (!game_end){
-                Field king_field = findKing(to.getPiece().getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
-                if (isCheck(king_field, king_field.getPiece().getColor())){
-                    new_move.setCheck();
-                }else if(isMat(king_field, king_field.getPiece().getColor())){
-                    new_move.setMat();
+                if(to.getPiece()!=null){
+                    Field king_field = findKing(to.getPiece().getColor() == color_piece.WHITE ? color_piece.BLACK : color_piece.WHITE);
+                    if (isCheck(king_field, king_field.getPiece().getColor())){
+                        new_move.setCheck();
+                    }else if(isMat(king_field, king_field.getPiece().getColor())){
+                        new_move.setMat();
+                    }
                 }
+
             }
 
             return new_move;
@@ -1186,6 +1191,8 @@ public class Game {
             Field to = item.getTo();
             Piece target = item.getTarget_to();
             Piece exchange = item.getExchange();
+            this.index--;
+
 
             board.moveHistory(from, to, target, exchange);
         }
@@ -1200,7 +1207,7 @@ public class Game {
             Field from = item.getFrom();
             Field to = item.getTo();
             Piece exchange = item.getExchange();
-
+            this.index++;
             board.moveHistory(to, from, null, exchange);
         }
     }

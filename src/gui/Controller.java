@@ -169,7 +169,7 @@ public class Controller {
 
 
     @FXML protected void gameType(ActionEvent event){
-        // TODO
+        tab.start_auto();
     }
 
         public void drawBoard(Pane pane, Tab tab){
