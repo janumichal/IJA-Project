@@ -171,7 +171,8 @@ public class Controller {
         File file = fileChooser.showSaveDialog(main.getScene().getWindow());
 
         if(file != null){
-           SaveFile(listView.getItems().toString(), file);
+
+           SaveFile(tab.game.printAllMoves(), file);
         }
     }
 
