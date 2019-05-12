@@ -39,6 +39,7 @@ public class Controller {
     private Boolean click = false;
     private Field from;
     private Field to;
+    private int moveCount;
     private Pane board[][] = new Pane[8][8];
 
 
@@ -78,6 +79,7 @@ public class Controller {
 
             to = tab.game.board.getField(col2,row2);
             tab.move(from, to);
+            moveCount++;
             Pane oldPane = board[currentPiece.getRow()][currentPiece.getCol()];
             Image image = null;
 
@@ -96,7 +98,27 @@ public class Controller {
 
     }
 
+    @FXML public void handleMouseClick(MouseEvent event) {
+        listView.getSelectionModel().getSelectedItem();
 
+        System.out.println(listView.getItems().size());
+        int count = (listView.getSelectionModel().getSelectedIndex()) * 2;
+
+        System.out.println(count);
+        for (int i = 0; i < count-1; i++){
+            tab.undo();
+            listView.getItems().clear();
+            loadListFromMove();
+            drawBoard(chessBoardView, tab);
+        }
+
+    }
+
+    @FXML protected void start(ActionEvent event){
+        tab.start_auto();
+        drawBoard(chessBoardView, tab);
+
+    }
 
     @FXML protected void stopGame(ActionEvent event){
         // TODO
@@ -128,6 +150,7 @@ public class Controller {
 
     @FXML protected void restart(ActionEvent event){
         tab.newGame();
+        listView.getItems().clear();
         loadListFromMove();
         drawBoard(chessBoardView, tab);
     }
