@@ -101,16 +101,14 @@ public class Controller {
     @FXML public void handleMouseClick(MouseEvent event) {
         listView.getSelectionModel().getSelectedItem();
 
-        System.out.println(listView.getItems().size());
         int count = (listView.getSelectionModel().getSelectedIndex()) * 2;
-
-        System.out.println(count);
         for (int i = 0; i < count-1; i++){
             tab.undo();
-            listView.getItems().clear();
-            loadListFromMove();
-            drawBoard(chessBoardView, tab);
+
         }
+        listView.getItems().clear();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
 
     }
 
