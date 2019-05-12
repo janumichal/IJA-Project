@@ -2,6 +2,7 @@ package gui;
 
 import Chess_pieces.*;
 import enums.color_piece;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -10,27 +11,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.scene.control.TextArea;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
 
-import java.util.Set;
 import java.io.File;
 import java.io.*;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.ArrayList;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 import java.util.Timer;
-
-
-
-import javafx.stage.Stage;
+import java.util.TimerTask;
 
 import Chess_common.*;
 
@@ -45,13 +34,17 @@ public class Controller {
     private int speed;
     private int moveCount;
     private Pane board[][] = new Pane[8][8];
-
+    Timer timer = new Timer();
 
     private Tab tab = new Tab();
 
     @FXML ListView<String> listView;
     @FXML private Slider slider;
 
+
+    /**
+     * initialize listener for slider
+     */
     public void initialize() {
 
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -60,7 +53,10 @@ public class Controller {
 
     }
 
-
+    /**
+     * initialize listener for mouse click
+     * @param event mouse click listener
+     */
     @FXML protected void onMouseClick(MouseEvent event){
 
         for (Node node : chessBoardView.getChildren()) {
@@ -112,6 +108,10 @@ public class Controller {
 
     }
 
+    /**
+     * initialize listener for mouse click
+     * @param event mouse click listener
+     */
     @FXML public void handleMouseClick(MouseEvent event) {
         listView.getSelectionModel().getSelectedItem();
 
@@ -126,49 +126,84 @@ public class Controller {
 
     }
 
+    TimerTask task;
 
-
+    /**
+     * start the game and timer
+     * @param event event listener
+     */
     @FXML protected void start(ActionEvent event){
-
-        while(true){
-            tab.next();
-            try {
-                wait(speed * 1000);
+        task = new TimerTask()
+        {
+            public void run()
+            {
+                tab.next();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawBoard(chessBoardView, tab);
+                    }
+                });
             }
-            catch(Exception e){}
 
-        }
-
+        };
+        timer.schedule(task,speed*1000);
     }
 
+    /**
+     * stop the game and timer
+     * @param event event listener
+     */
     @FXML protected void stop(ActionEvent event){
-        // TODO
+        task.cancel();
+        timer.cancel();
+        timer.purge();
     }
 
+    /**
+     * undo move
+     * @param event event listener
+     */
     @FXML protected void undo(ActionEvent event){
         tab.undo();
         loadListFromMove();
         drawBoard(chessBoardView, tab);
     }
 
+    /**
+     * redo move
+     * @param event event listener
+     */
     @FXML protected void redo(ActionEvent event){
         tab.redo();
         loadListFromMove();
         drawBoard(chessBoardView, tab);
     }
 
+    /**
+     * next move
+     * @param event event listener
+     */
     @FXML protected void next(ActionEvent event){
         tab.next();
         loadListFromMove();
         drawBoard(chessBoardView, tab);
     }
 
+    /**
+     * previous move
+     * @param event event listener
+     */
     @FXML protected void prew(ActionEvent event) {
         tab.prew();
         loadListFromMove();
         drawBoard(chessBoardView, tab);
     }
 
+    /**
+     * restart the game
+     * @param event event listener
+     */
     @FXML protected void restart(ActionEvent event){
         tab.newGame();
         listView.getItems().clear();
@@ -176,6 +211,10 @@ public class Controller {
         drawBoard(chessBoardView, tab);
     }
 
+    /**
+     * load moves from file
+     * @param event event listener
+     */
     @FXML protected void load(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -200,6 +239,9 @@ public class Controller {
 
     }
 
+    /**
+     * load list of moves
+     */
     public void loadListFromMove(){
         listView.getItems().clear();
         String[] radky = tab.game.printAllMoves().split("\n");
@@ -208,6 +250,10 @@ public class Controller {
         }
     }
 
+    /**
+     * save moves to file
+     * @param event event listener
+     */
     @FXML protected void save(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -221,6 +267,11 @@ public class Controller {
         }
     }
 
+    /**
+     * save file
+     * @param content content of the file
+     * @param file name of the file
+     */
     private void SaveFile(String content, File file){
         try {
             FileWriter fileWriter = null;
@@ -234,85 +285,90 @@ public class Controller {
 
     }
 
+    /**
+     * set game type
+     * @param event event listener
+     */
     @FXML protected void gameType(ActionEvent event){
         tab.start_auto();
     }
 
-        public void drawBoard(Pane pane, Tab tab){
+    /**
+     * place figures to board
+     * @param pane actual field
+     * @param tab actual tab
+     */
+    public void drawBoard(Pane pane, Tab tab){
 
-            for (Node node : pane.getChildren()) {
-                try {
-                    ((Pane)node).getChildren().clear();
-                }catch (Exception e){
+        for (Node node : pane.getChildren()) {
+            try {
+                ((Pane)node).getChildren().clear();
+            }
+            catch (Exception e){
+            }
 
-                }
+            int img_size = 50;
+            Integer y = GridPane.getColumnIndex(node);
+            Integer x = GridPane.getRowIndex(node);
+            int row = y == null ? 0 : y;
+            int col = x == null ? 0 : x;
+            if (node instanceof Pane) {
+                node.setId("pane" + row + "_" + col);
+            }
+            if ((row + col) % 2 == 0) {
+                node.setStyle("-fx-background-color: rgb(255,255,255);");
+            } else {
+                node.setStyle("-fx-background-color: rgb(128,128,128);");
+            }
 
-                int img_size = 50;
-                Integer y = GridPane.getColumnIndex(node);
-                Integer x = GridPane.getRowIndex(node);
-                int row = y == null ? 0 : y;
-                int col = x == null ? 0 : x;
-                if (node instanceof Pane) {
-                    node.setId("pane" + row + "_" + col);
-                }
+            ImageView img;
 
-                if ((row + col) % 2 == 0) {
-                    node.setStyle("-fx-background-color: rgb(255,255,255);");
-                } else {
-                    node.setStyle("-fx-background-color: rgb(128,128,128);");
-                }
-
-
-
-                ImageView img;
-
-                Piece piece = tab.game.board.getField(row, col).getPiece();
-                if(piece instanceof Rook){
-                    if (piece.getColor() == color_piece.WHITE){
-                        img = new ImageView(new Image("chess_figures_img/Rook_w.png"));
-                    }else{
-                        img = new ImageView(new Image("chess_figures_img/Rook_b.png"));
-                    }
-                }else if(piece instanceof Knight){
-                    if (piece.getColor() == color_piece.WHITE){
-                        img = new ImageView(new Image("chess_figures_img/Knight_w.png"));
-                    }else{
-                        img = new ImageView(new Image("chess_figures_img/Knight_b.png"));
-                    }
-                }else if(piece instanceof Bishop){
-                    if (piece.getColor() == color_piece.WHITE){
-                        img = new ImageView(new Image("chess_figures_img/Bishop_w.png"));
-                    }else{
-                        img = new ImageView(new Image("chess_figures_img/Bishop_b.png"));
-                    }
-                }else if(piece instanceof King){
-                    if (piece.getColor() == color_piece.WHITE){
-                        img = new ImageView(new Image("chess_figures_img/King_w.png"));
-                    }else{
-                        img = new ImageView(new Image("chess_figures_img/King_b.png"));
-                    }
-                }else if(piece instanceof Queen){
-                    if (piece.getColor() == color_piece.WHITE){
-                        img = new ImageView(new Image("chess_figures_img/Queen_w.png"));
-                    }else{
-                        img = new ImageView(new Image("chess_figures_img/Queen_b.png"));
-                    }
-                }else if(piece instanceof Pawn){
-                    if (piece.getColor() == color_piece.WHITE){
-                        img = new ImageView(new Image("chess_figures_img/Pawn_w.png"));
-                    }else{
-                        img = new ImageView(new Image("chess_figures_img/Pawn_B.png"));
-                    }
+            Piece piece = tab.game.board.getField(row, col).getPiece();
+            if(piece instanceof Rook){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image("chess_figures_img/Rook_w.png"));
                 }else{
-                    img = new ImageView();
-                    img.setImage(null);
+                    img = new ImageView(new Image("chess_figures_img/Rook_b.png"));
                 }
-
-                if (node instanceof Pane){
-                    img.setFitHeight(img_size);
-                    img.setFitWidth(img_size);
-                    ((Pane)node).getChildren().add(img);
+            }else if(piece instanceof Knight){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image("chess_figures_img/Knight_w.png"));
+                }else{
+                    img = new ImageView(new Image("chess_figures_img/Knight_b.png"));
                 }
+            }else if(piece instanceof Bishop){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image("chess_figures_img/Bishop_w.png"));
+                }else{
+                    img = new ImageView(new Image("chess_figures_img/Bishop_b.png"));
+                }
+            }else if(piece instanceof King){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image("chess_figures_img/King_w.png"));
+                }else{
+                    img = new ImageView(new Image("chess_figures_img/King_b.png"));
+                }
+            }else if(piece instanceof Queen){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image("chess_figures_img/Queen_w.png"));
+                }else{
+                    img = new ImageView(new Image("chess_figures_img/Queen_b.png"));
+                }
+            }else if(piece instanceof Pawn){
+                if (piece.getColor() == color_piece.WHITE){
+                    img = new ImageView(new Image("chess_figures_img/Pawn_w.png"));
+                }else{
+                    img = new ImageView(new Image("chess_figures_img/Pawn_B.png"));
+                }
+            }else{
+                img = new ImageView();
+                img.setImage(null);
+            }
+            if (node instanceof Pane){
+                img.setFitHeight(img_size);
+                img.setFitWidth(img_size);
+                ((Pane)node).getChildren().add(img);
             }
         }
+    }
 }
