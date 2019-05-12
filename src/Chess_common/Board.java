@@ -34,6 +34,7 @@ public class Board {
 
     /**
      * Prints out the points
+     * @return points
      */
     public String printPoints(){
         return "White: " + getWhite_points() + " Black: " + getBlack_points();

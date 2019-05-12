@@ -40,4 +40,17 @@
             <fileset dir="dest" includes="**/*"/>
         </delete>
     </target>
+
+
+    <!--CLEANS DOC-->
+    <target name="clean_doc" description="cleans dirs">
+        <delete includeemptydirs="true">
+            <fileset dir="doc" includes="**/*"/>
+        </delete>
+    </target>
+
+    <!--CREATES JAVADOC-->
+    <target name="doc" description="generatec ducumentation">
+        <javadoc sourcepath="src" destdir="doc"/>
+    </target>
 </project>
