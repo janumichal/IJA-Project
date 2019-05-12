@@ -56,4 +56,18 @@ public class Piece {
     public void setRow(int y) {
         this.y = y;
     }
+
+    /**
+     * Getter for column.
+     * @return column number
+     */
+    public int getCol() { return this.x; }
+
+    /**
+     * Getter for row.
+     * @return row number
+     */
+    public int getRow() {
+        return this.y;
+    }
 }
