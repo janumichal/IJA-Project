@@ -2,6 +2,8 @@ package gui;
 
 import Chess_pieces.*;
 import enums.color_piece;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,10 +21,12 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.SimpleTimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import Chess_common.*;
+import javafx.util.Duration;
 
 
 public class Controller {
@@ -127,36 +131,31 @@ public class Controller {
 
     }
 
-    TimerTask task;
-
     /**
      * start the game and timer
      * @param event event listener
      */
     @FXML protected void start(ActionEvent event){
-        task = new TimerTask()
-        {
-            public void run()
-            {
-                tab.next();
+
+        timer.schedule(new TimerTask() {
+            public void run() {
                 Platform.runLater(new Runnable() {
-                    @Override
                     public void run() {
+                        tab.next();
                         drawBoard(chessBoardView, tab);
                     }
                 });
             }
-
-        };
-        timer.schedule(task,speed*1000);
+        }, 0, speed*1000);
     }
+
+
 
     /**
      * stop the game and timer
      * @param event event listener
      */
     @FXML protected void stop(ActionEvent event){
-        task.cancel();
         timer.cancel();
         timer.purge();
     }
