@@ -5,6 +5,7 @@ import enums.color_piece;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import java.util.Timer;
+
 
 
 import javafx.stage.Stage;
@@ -39,12 +42,24 @@ public class Controller {
     private Boolean click = false;
     private Field from;
     private Field to;
+    private int speed;
+    private int moveCount;
     private Pane board[][] = new Pane[8][8];
 
 
     private Tab tab = new Tab();
 
     @FXML ListView<String> listView;
+    @FXML private Slider slider;
+
+    public void initialize() {
+
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            speed = newValue.intValue();
+        });
+
+    }
+
 
     @FXML protected void onMouseClick(MouseEvent event){
 
@@ -78,6 +93,7 @@ public class Controller {
 
             to = tab.game.board.getField(col2,row2);
             tab.move(from, to);
+            moveCount++;
             Pane oldPane = board[currentPiece.getRow()][currentPiece.getCol()];
             Image image = null;
 
@@ -96,9 +112,36 @@ public class Controller {
 
     }
 
+    @FXML public void handleMouseClick(MouseEvent event) {
+        listView.getSelectionModel().getSelectedItem();
+
+        int count = (listView.getSelectionModel().getSelectedIndex()) * 2;
+        for (int i = 0; i < count-1; i++){
+            tab.undo();
+
+        }
+        listView.getItems().clear();
+        loadListFromMove();
+        drawBoard(chessBoardView, tab);
+
+    }
 
 
-    @FXML protected void stopGame(ActionEvent event){
+
+    @FXML protected void start(ActionEvent event){
+
+        while(true){
+            tab.next();
+            try {
+                wait(speed * 1000);
+            }
+            catch(Exception e){}
+
+        }
+
+    }
+
+    @FXML protected void stop(ActionEvent event){
         // TODO
     }
 
@@ -128,6 +171,7 @@ public class Controller {
 
     @FXML protected void restart(ActionEvent event){
         tab.newGame();
+        listView.getItems().clear();
         loadListFromMove();
         drawBoard(chessBoardView, tab);
     }
@@ -172,7 +216,8 @@ public class Controller {
 
         if(file != null){
 
-           SaveFile(tab.game.printAllMoves(), file);
+            SaveFile(tab.game.printAllMoves(), file);
+
         }
     }
 
