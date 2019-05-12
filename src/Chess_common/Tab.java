@@ -83,6 +83,7 @@ public class Tab {
 //
 //
 //        this.game.board.showPiecesText();
+//        System.out.println(this.game.printAllMoves());
 //    }
 
     /**
