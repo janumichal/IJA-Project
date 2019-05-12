@@ -129,7 +129,7 @@ public class Controller {
         drawBoard(chessBoardView, tab);
 
     }
-int count = 0;
+
     Timer timer;
     /**
      * start the game and timer
@@ -142,8 +142,6 @@ int count = 0;
             public void run() {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        count++;
-                        System.out.println(count);
                         tab.next();
                         drawBoard(chessBoardView, tab);
                     }
