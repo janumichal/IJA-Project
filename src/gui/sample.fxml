@@ -196,14 +196,8 @@
           <Menu mnemonicParsing="false" style="width: 50;" text="Game">
             <items>
                <MenuItem mnemonicParsing="false" onAction="#load" text="Load" />
-               <MenuItem mnemonicParsing="false" text="Save" />
+               <MenuItem mnemonicParsing="false" onAction="#save" text="Save" />
                <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart" />
-               <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>

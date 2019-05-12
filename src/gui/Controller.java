@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
 import java.util.Set;
+import java.io.File;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
@@ -164,9 +165,28 @@ public class Controller {
     }
 
     @FXML protected void save(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(main.getScene().getWindow());
 
+        if(file != null){
+           SaveFile(listView.getItems().toString(), file);
+        }
     }
 
+    private void SaveFile(String content, File file){
+        try {
+            FileWriter fileWriter = null;
+
+            fileWriter = new FileWriter(file);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (Exception e) {
+
+        }
+
+    }
 
     @FXML protected void gameType(ActionEvent event){
         tab.start_auto();
@@ -239,6 +259,7 @@ public class Controller {
                     }
                 }else{
                     img = new ImageView();
+                    img.setImage(null);
                 }
 
                 if (node instanceof Pane){
