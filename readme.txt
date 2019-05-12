@@ -1,5 +1,5 @@
 PROJEKT DO PREDMĚTU IJA (Chess)
-rozdělení bodů 50-50
+rozdělení bodů xjanum03-xsvarc06 65-35
 
 Projekt jde přeloži pomocí ant:
 ant run (zkompiluje a zpustí program)
