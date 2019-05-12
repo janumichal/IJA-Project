@@ -209,6 +209,7 @@ public class Controller {
                     }
                 }else{
                     img = new ImageView();
+                    img.setImage(null);
                 }
 
                 if (node instanceof Pane){
