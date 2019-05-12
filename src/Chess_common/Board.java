@@ -35,8 +35,8 @@ public class Board {
     /**
      * Prints out the points
      */
-    public void printPoints(){
-        System.out.println("White: " + getWhite_points() + " Black: " + getBlack_points());
+    public String printPoints(){
+        return "White: " + getWhite_points() + " Black: " + getBlack_points();
     }
 
     // constructor creates array and fills it with pieces
