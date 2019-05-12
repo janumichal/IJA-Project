@@ -75,39 +75,39 @@ public class Main extends Application {
             Piece piece = tab.game.board.getField(row, col).getPiece();
             if(piece instanceof Rook){
                 if (piece.getColor() == color_piece.WHITE){
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Rook_w.png")));
+                    img = new ImageView(new Image("chess_figures_img/Rook_w.png"));
                 }else{
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Rook_b.png")));
+                    img = new ImageView(new Image("chess_figures_img/Rook_b.png"));
                 }
             }else if(piece instanceof Knight){
                 if (piece.getColor() == color_piece.WHITE){
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Knight_w.png")));
+                    img = new ImageView(new Image("chess_figures_img/Knight_w.png"));
                 }else{
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Knight_b.png")));
+                    img = new ImageView(new Image("chess_figures_img/Knight_b.png"));
                 }
             }else if(piece instanceof Bishop){
                 if (piece.getColor() == color_piece.WHITE){
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_w.png")));
+                    img = new ImageView(new Image("chess_figures_img/Bishop_w.png"));
                 }else{
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Bishop_b.png")));
+                    img = new ImageView(new Image("chess_figures_img/Bishop_b.png"));
                 }
             }else if(piece instanceof King){
                 if (piece.getColor() == color_piece.WHITE){
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/King_w.png")));
+                    img = new ImageView(new Image("chess_figures_img/King_w.png"));
                 }else{
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/King_b.png")));
+                    img = new ImageView(new Image("chess_figures_img/King_b.png"));
                 }
             }else if(piece instanceof Queen){
                 if (piece.getColor() == color_piece.WHITE){
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Queen_w.png")));
+                    img = new ImageView(new Image("chess_figures_img/Queen_w.png"));
                 }else{
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Queen_b.png")));
+                    img = new ImageView(new Image("chess_figures_img/Queen_b.png"));
                 }
             }else if(piece instanceof Pawn){
                 if (piece.getColor() == color_piece.WHITE){
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Pawn_w.png")));
+                    img = new ImageView(new Image("chess_figures_img/Pawn_w.png"));
                 }else{
-                    img = new ImageView(new Image(Main.class.getResourceAsStream("../chess_figures_img/Pawn_b.png")));
+                    img = new ImageView(new Image("chess_figures_img/Pawn_B.png"));
                 }
             }else{
                 img = new ImageView();

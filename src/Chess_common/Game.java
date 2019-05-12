@@ -1263,8 +1263,12 @@ public class Game {
 
     /**
      * Prints all saved moves to console.
+     * @return string with all moves
      */
-    public void printAllMoves(){
+    public String printAllMoves(){
+        String all_moves;
+        StringBuffer string;
+        string = new StringBuffer();
         int counter = 1;
         int arr_size = this.loaded_moves.size();
         for (int idx = 0; idx < arr_size ; idx++){
@@ -1272,15 +1276,21 @@ public class Game {
             boolean even = idx % 2 == 0;
             String move = this.loaded_moves.get(idx).pritnMove();
             if (even){
-                System.out.print(counter + ". " + move + " ("+ idx + ") ");
+                all_moves = counter + ". " + move + " ";
+                string.append(all_moves);
+//                System.out.print(counter + ". " + move + " ("+ idx + ") ");
                 if (idx+1 == arr_size){
-                    System.out.println();
+                    string.append("\n");
+//                    System.out.println();
                 }
             }else {
-                System.out.print(move + " ("+ idx + ") \n");
+                all_moves = move + " \n";
+                string.append(all_moves);
+//                System.out.print(move + " ("+ idx + ") \n");
                 counter++;
             }
         }
+        return string.toString();
     }
 
     /**
