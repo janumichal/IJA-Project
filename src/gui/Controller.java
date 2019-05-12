@@ -36,7 +36,7 @@ public class Controller {
     private Boolean click = false;
     private Field from;
     private Field to;
-    private int speed;
+    private int speed = 1;
     private int moveCount;
     private Pane board[][] = new Pane[8][8];
     Timer timer = new Timer();
@@ -130,7 +130,7 @@ public class Controller {
         drawBoard(chessBoardView, tab);
 
     }
-
+int count = 0;
     /**
      * start the game and timer
      * @param event event listener
@@ -141,6 +141,8 @@ public class Controller {
             public void run() {
                 Platform.runLater(new Runnable() {
                     public void run() {
+                        count++;
+                        System.out.println(count);
                         tab.next();
                         drawBoard(chessBoardView, tab);
                     }
