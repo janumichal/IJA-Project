@@ -5,6 +5,7 @@ import enums.color_piece;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -40,7 +41,7 @@ public class Controller {
 
     @FXML ListView<String> listView;
     @FXML private Slider slider;
-
+    @FXML private Label body;
 
     /**
      * initialize listener for slider
@@ -50,6 +51,8 @@ public class Controller {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             speed = newValue.intValue();
         });
+
+        body.setText("Body: " + tab.game.board.printPoints());
 
     }
 
