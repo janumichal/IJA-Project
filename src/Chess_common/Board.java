@@ -15,12 +15,14 @@ import javafx.scene.control.Alert;
  */
 public class Board {
     private static final int BOARD_SIZE = 8;
+    public boolean valid = true;
     private Field[][] board_array;
     private HistoryItem historyItem;
     public boolean white_on_move;
     private int white_points;
     private int black_points;
     public boolean game_end = false;
+    public boolean validation = true;
 
     /**
      * Check if is white on move.
@@ -350,6 +352,7 @@ public class Board {
                 alert.setHeaderText(null);
                 alert.setContentText("CANT ATTACK SAME COLOR");
                 alert.showAndWait();
+                this.validation = false;
             }else{
                 Piece piece_to;
                 Piece piece_from = from.removePiece();

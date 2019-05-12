@@ -201,6 +201,10 @@ public class Game {
                     }
 
                     this.index++;
+                    if(!this.board.validation){
+                        this.board.validation = true;
+                        this.index--;
+                    }
                 }else{
                     if ((from.getPiece() != null && from.getPiece().getColor() == color_piece.WHITE && to.getRow() == 0)||(from.getPiece() != null && from.getPiece().getColor() == color_piece.BLACK && to.getRow() == 7)){
                         if (this.board.is_white_on_move()){
@@ -244,6 +248,10 @@ public class Game {
 
 
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
             }else if (one_move.isKing() && one_move.getFrom().getPiece() instanceof King){
                 move(from, to);
 
@@ -252,6 +260,10 @@ public class Game {
                 }
 
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
             }else if (one_move.isQueen() && from.getPiece() instanceof Queen){
                 move(from, to);
 
@@ -260,6 +272,10 @@ public class Game {
                 }
 
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
             }else if (one_move.isBishop() && from.getPiece() instanceof Bishop){
                 move(from, to);
 
@@ -268,14 +284,23 @@ public class Game {
                 }
 
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
             }else if (one_move.isRook() && from.getPiece() instanceof Rook){
                 move(from, to);
 
                 if (!checkMat(one_move)){
+                    this.board.validation = true;
                     return;
                 }
 
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
             }else {
                 System.out.println("WRONGLY FORMATED MOVE");
             }
@@ -968,6 +993,10 @@ public class Game {
         }
 
         this.index++;
+        if(!this.board.validation){
+            this.board.validation = true;
+            this.index--;
+        }
     }
 
     /**
@@ -987,6 +1016,10 @@ public class Game {
                 }
 
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
                 break;
             }
         }
@@ -1090,14 +1123,21 @@ public class Game {
                 }
 
                 this.loaded_moves.add(move);
+
                 this.index++;
+                if(!this.board.validation){
+                    this.board.validation = true;
+                    this.index--;
+                }
             }
         }else{
             item = this.board.movePiece(from, to);
-            this.game_end = this.board.game_end;
-            if (item != null){
-                this.history.add(item);
-            }
+                this.game_end = this.board.game_end;
+                if (item != null){
+                    this.history.add(item);
+                }else{
+                    this.index--;
+                }
         }
     }
 
@@ -1147,6 +1187,7 @@ public class Game {
         }
 
         item = this.board.movePiece(from, to);
+
         this.game_end = this.board.game_end;
         if (item != null){
             this.history.add(item);
